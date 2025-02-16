@@ -1,0 +1,51 @@
+{
+  "mt5Credentials": {
+    "server": "Fundezy-Live",
+    "login": "12345678",
+    "password": "********"
+  },
+  "stats": {
+    "rank": 1324,
+    "totalTraders": 7000,
+    "dailyTradeCount": 4,
+    "dailyLossPercent": -1.2,
+    "totalLossPercent": -3.5,
+    "totalGainPercent": 12.5,
+    "consistencyScore": 85
+  },
+  "equityData": [
+    { "date": "2023-01-01", "equity": 10000, "passingMark": 11000, "failingMark": 9000 },
+    { "date": "2023-01-02", "equity": 10500, "passingMark": 11000, "failingMark": 9000 },
+    { "date": "2023-01-03", "equity": 10300, "passingMark": 11000, "failingMark": 9000 },
+    { "date": "2023-01-04", "equity": 10800, "passingMark": 11000, "failingMark": 9000 },
+    { "date": "2023-01-05", "equity": 11200, "passingMark": 11000, "failingMark": 9000 }
+  ],
+  "underwaterData": [
+    { "date": "2023-01-01", "drawdown": 0 },
+    { "date": "2023-01-02", "drawdown": -2 },
+    { "date": "2023-01-03", "drawdown": -5 },
+    { "date": "2023-01-04", "drawdown": -3 },
+    { "date": "2023-01-05", "drawdown": 0 }
+  ],
+  "previousTrades": [
+    { "id": 1, "symbol": "EURUSD", "type": "BUY", "profit": 150, "date": "2023-01-05" },
+    { "id": 2, "symbol": "GBPUSD", "type": "SELL", "profit": -50, "date": "2023-01-05" },
+    { "id": 3, "symbol": "USDJPY", "type": "BUY", "profit": 200, "date": "2023-01-04" }
+  ],
+  "bestTrades": [
+    { "id": 1, "symbol": "EURUSD", "type": "BUY", "profit": 450, "date": "2023-01-03" },
+    { "id": 2, "symbol": "GBPJPY", "type": "SELL", "profit": 380, "date": "2023-01-04" },
+    { "id": 3, "symbol": "USDJPY", "type": "BUY", "profit": 320, "date": "2023-01-02" },
+    { "id": 4, "symbol": "AUDUSD", "type": "BUY", "profit": 290, "date": "2023-01-05" },
+    { "id": 5, "symbol": "USDCAD", "type": "SELL", "profit": 275, "date": "2023-01-01" },
+    { "id": 6, "symbol": "EURJPY", "type": "BUY", "profit": 260, "date": "2023-01-03" }
+  ],
+  "worstTrades": [
+    { "id": 1, "symbol": "GBPUSD", "type": "SELL", "profit": -320, "date": "2023-01-02" },
+    { "id": 2, "symbol": "EURUSD", "type": "BUY", "profit": -280, "date": "2023-01-04" },
+    { "id": 3, "symbol": "USDJPY", "type": "SELL", "profit": -250, "date": "2023-01-03" },
+    { "id": 4, "symbol": "AUDUSD", "type": "SELL", "profit": -220, "date": "2023-01-05" },
+    { "id": 5, "symbol": "USDCHF", "type": "BUY", "profit": -190, "date": "2023-01-01" },
+    { "id": 6, "symbol": "EURJPY", "type": "SELL", "profit": -175, "date": "2023-01-03" }
+  ]
+}

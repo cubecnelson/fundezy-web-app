@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundazey - Revolutionizing Proprietary Trading</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+        }
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 60px 10%;
+            text-align: center;
+        }
+        .hero-text {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        section {
+            padding: 40px 10%;
+        }
+        h1, h2, h3 {
+            color: #1e3c72;
+            margin-top: 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 10px 0;
+            background: #2a5298;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .button:hover {
+            background: #1e3c72;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .stats-table th, .stats-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .stats-table th {
+            background: #f8f9fa;
+            color: #1e3c72;
+        }
+        .stats-table tr:hover {
+            background: #f8f9fa;
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+            margin: 20px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        footer {
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .highlight {
+            color: #2a5298;
+            font-weight: bold;
+        }
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            section {
+                padding: 20px 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="hero-text">
+        <h1>Fundazey</h1>
+        <p style="font-size: 1.2em;">Revolutionizing Proprietary Trading</p>
+        <a href="#contact" class="button">Join the Revolution</a>
+    </div>
+</header>
+
+<section>
+    <h2>Executive Summary</h2>
+    <p>Fundazey is revolutionizing proprietary trading through innovative capital access and wealth-building opportunities. Starting in emerging markets and evolving to global regulated markets.</p>
+    <div class="grid">
+        <div class="card">
+            <h3>Team Development</h3>
+            <p>$200,000 (20%)</p>
+        </div>
+        <div class="card">
+            <h3>Technology</h3>
+            <p>$200,000 (20%)</p>
+        </div>
+        <div class="card">
+            <h3>Marketing</h3>
+            <p>$300,000 (30%)</p>
+        </div>
+        <div class="card">
+            <h3>Liquidity Reserve</h3>
+            <p>$300,000 (30%)</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Investment Journey & Revenue Growth</h2>
+    <div class="chart-container">
+        <canvas id="investmentChart"></canvas>
+    </div>
+</section>
+
+<section>
+    <h2>Funding Rounds Overview</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Seeding</h3>
+            <p><strong>Stage:</strong> Starting</p>
+            <p><strong>Licensing:</strong> Waver (Challenges Only)</p>
+            <p><strong>Funding:</strong> $300,000</p>
+            <p><strong>Holding:</strong> 30%</p>
+            <p><strong>Valuation:</strong> $1,000,000</p>
+            <p><strong>Active Users:</strong> 0-50</p>
+        </div>
+        <div class="card">
+            <h3>Round A</h3>
+            <p><strong>Stage:</strong> Break-even</p>
+            <p><strong>Licensing:</strong> St. Louise</p>
+            <p><strong>Funding:</strong> $1,000,000</p>
+            <p><strong>Holding:</strong> 18%</p>
+            <p><strong>Valuation:</strong> $5,555,555</p>
+            <p><strong>Active Users:</strong> 300</p>
+        </div>
+        <div class="card">
+            <h3>Round B</h3>
+            <p><strong>Stage:</strong> Growth</p>
+            <p><strong>Licensing:</strong> UK</p>
+            <p><strong>Funding:</strong> $5,000,000</p>
+            <p><strong>Holding:</strong> 15%</p>
+            <p><strong>Valuation:</strong> $33,333,333</p>
+            <p><strong>Active Users:</strong> 1,000</p>
+        </div>
+        <div class="card">
+            <h3>Round C</h3>
+            <p><strong>Stage:</strong> Scale</p>
+            <p><strong>Licensing:</strong> UK, EU, HK</p>
+            <p><strong>Funding:</strong> $15,000,000</p>
+            <p><strong>Holding:</strong> 15%</p>
+            <p><strong>Valuation:</strong> $100,000,000</p>
+            <p><strong>Active Users:</strong> 3,000</p>
+        </div>
+        <div class="card">
+            <h3>Round D</h3>
+            <p><strong>Stage:</strong> Hyper Scale</p>
+            <p><strong>Licensing:</strong> International</p>
+            <p><strong>Funding:</strong> $25,000,000</p>
+            <p><strong>Holding:</strong> 10%</p>
+            <p><strong>Valuation:</strong> $250,000,000</p>
+            <p><strong>Active Users:</strong> 10,000</p>
+        </div>
+    </div>
+</section>
+
+<section style="background: #f8f9fa;">
+    <h2>Revenue Streams</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Challenge Fees</h3>
+            <p>$200 - $10,000 per challenge</p>
+            <p class="highlight">$60,000 monthly potential</p>
+        </div>
+        <div class="card">
+            <h3>Profit Sharing</h3>
+            <p>20% retention from funded traders</p>
+            <p class="highlight">Recurring revenue stream</p>
+        </div>
+        <div class="card">
+            <h3>B-Book Model</h3>
+            <p>Internal risk management</p>
+            <p class="highlight">70-80% profit margins</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Market Position</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>FTMO</h3>
+            <p>Market Share: 45%</p>
+            <p>Revenue: $24-30M</p>
+        </div>
+        <div class="card">
+            <h3>MyForexFunds</h3>
+            <p>Market Share: 30%</p>
+            <p>Revenue: $20-25M</p>
+        </div>
+        <div class="card">
+            <h3>DarwinX</h3>
+            <p>Market Share: 15%</p>
+            <p>Revenue: $10-15M</p>
+        </div>
+    </div>
+</section>
+
+<section style="background: #f8f9fa;">
+    <h2>Financial Projections</h2>
+    <table class="stats-table">
+        <thead>
+            <tr>
+                <th>Year</th>
+                <th>Traders/Month</th>
+                <th>Revenue</th>
+                <th>Net Income</th>
+                <th>ROI</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>300</td>
+                <td>$1.66M</td>
+                <td>$1.26M</td>
+                <td>126%</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>1,000</td>
+                <td>$5.53M</td>
+                <td>$4.20M</td>
+                <td>420%</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>3,000</td>
+                <td>$16.59M</td>
+                <td>$12.61M</td>
+                <td>1,261%</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>10,000</td>
+                <td>$55.32M</td>
+                <td>$42.04M</td>
+                <td>4,204%</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h2>Evolution Strategy</h2>
+    <div class="grid">
+        <div class="card">
+            <h3>Phase 1: B-Book</h3>
+            <p>Years 1-3</p>
+            <p>Emerging markets focus</p>
+            <p>70-80% margins</p>
+        </div>
+        <div class="card">
+            <h3>Phase 2: Hybrid</h3>
+            <p>Years 4-6</p>
+            <p>Regulated markets entry</p>
+            <p>50-60% margins</p>
+        </div>
+        <div class="card">
+            <h3>Phase 3: A-Book</h3>
+            <p>Year 7+</p>
+            <p>Global presence</p>
+            <p>30-40% margins</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2025 Fundazey. All Rights Reserved.</p>
+</footer>
+
+<script>
+    const ctx = document.getElementById('investmentChart').getContext('2d');
+    const investmentChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Seeding', 'Round A', 'Round B', 'Round C', 'Round D'],
+            datasets: [
+                {
+                    label: 'Funding ($M)',
+                    data: [0.3, 1, 5, 15, 25],
+                    borderColor: '#2a5298',
+                    backgroundColor: 'rgba(42, 82, 152, 0.2)',
+                    fill: false,
+                    yAxisID: 'y',
+                    tension: 0.4
+                },
+                {
+                    label: 'Valuation ($M)',
+                    data: [1, 5.55, 33.33, 100, 250],
+                    borderColor: '#1e3c72',
+                    backgroundColor: 'rgba(30, 60, 114, 0.2)',
+                    fill: false,
+                    yAxisID: 'y',
+                    tension: 0.4
+                },
+                {
+                    label: 'Revenue Growth (%)',
+                    data: [0, 455, 500, 200, 150],
+                    borderColor: '#4CAF50',
+                    backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                    fill: false,
+                    yAxisID: 'y1',
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            if (context.dataset.label.includes('Growth')) {
+                                return `${context.raw}%`;
+                            }
+                            return `$${context.raw}M`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Million USD ($)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return `$${value}M`;
+                        }
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Revenue Growth (%)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return `${value}%`;
+                        }
+                    },
+                    grid: {
+                        drawOnChartArea: false
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
