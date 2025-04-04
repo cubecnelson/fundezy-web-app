@@ -15,10 +15,11 @@ export interface MT5Account {
   };
 }
 
-interface DemoAccount {
+export interface DemoAccount {
   id: string;
   server: string;
   login: string;
+  email: string;
   password: string;
   assignedTo?: string | null;
 }
@@ -34,6 +35,66 @@ interface AuditLog {
     previousStatus: string;
   };
 }
+
+export const fetchDemoAccountAssignedTo = async (mt5AccountId: string): Promise<DemoAccount[]> => {
+  if (!mt5AccountId) {
+    throw new Error('MT5 Account ID is required to fetch demo accounts');
+  }
+
+  try {
+    const response = await fetch('https://us-central1-fundezy-app.cloudfunctions.net/demoAccounts');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch demo accounts: ${response.statusText}`);
+    }
+    const accounts = await response.json();
+    return accounts.filter((account: DemoAccount) => account.assignedTo === mt5AccountId);
+  } catch (error) {
+    console.error('Error fetching demo accounts:', error);
+    throw error;
+  }
+};
+
+export const fetchMT5AccountById = async (id: string): Promise<MT5Account> => {
+  if (!id) {
+    throw new Error('ID is required to fetch MT5 account');
+  }
+
+  try {
+    const response = await fetch(`https://mt5accounts-6wrzc5r7aq-uc.a.run.app/${id}`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch MT5 account: ${response.statusText}`);
+    }
+    const data = await response.json();
+    if (!data) {
+      throw new Error('No MT5 account found with this ID');
+    }
+    return data;
+  } catch (error) {
+    console.error('Error fetching MT5 account by ID:', error);
+    throw error;
+  }
+};
+
+
+export const fetchDemoAccountByEmail = async (email: string): Promise<DemoAccount | null> => {
+  if (!email) {
+    throw new Error('Email is required to fetch demo account');
+  }
+
+  try {
+    const response = await fetch('https://us-central1-fundezy-app.cloudfunctions.net/demoAccounts');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch demo accounts: ${response.statusText}`);
+    }
+    const accounts = await response.json();
+    const matchingAccount = accounts.find((account: DemoAccount) => account.email === email);
+    return matchingAccount || null;
+  } catch (error) {
+    console.error('Error fetching demo account by email:', error);
+    throw error;
+  }
+};
+
 
 export const fetchMT5Account = async (email: string): Promise<MT5Account[]> => {
   if (!email) {

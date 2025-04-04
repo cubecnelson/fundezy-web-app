@@ -10,11 +10,13 @@ import {
   ReferenceLine,
 } from 'recharts';
 import { useAuth } from '../contexts/AuthContext';
-import { fetchMT5Account, type MT5Account } from '../services/mt5Service';
+import { DemoAccount, fetchDemoAccountAssignedTo, fetchMT5Account, type MT5Account } from '../services/mt5Service';
 import { dashboardService, type Stats, type EquityData, type UnderwaterData, type Trade } from '../services/dashboardService';
 import { MT5Credentials } from '../components/MT5Credentials';
+import { RankingsTable, type RankingType } from '../components/RankingsTable';
 import { PlusIcon } from '@heroicons/react/24/outline';
-
+import mockRankingsData from '../data/mockRankingsData.json';
+import TeamUserTable from '../components/TeamUserTable';
 export const Dashboard = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -28,12 +30,32 @@ export const Dashboard = () => {
   const [bestTrades, setBestTrades] = useState<Trade[]>([]);
   const [worstTrades, setWorstTrades] = useState<Trade[]>([]);
   const [showCreateAccount, setShowCreateAccount] = useState(false);
+  const [rankingType, setRankingType] = useState<RankingType>('daily');
+  const [teamUsers, setTeamUsers] = useState<DemoAccount[]>([]);
+
 
   useEffect(() => {
     if (user?.email) {
       fetchUserAccounts();
     }
   }, [user?.email]);
+
+  useEffect(() => {
+    if (selectedAccount?.id) {
+      fetchTeamUsers(selectedAccount?.id);
+    }
+  }, [selectedAccount?.id]);
+
+  const fetchTeamUsers = async (mt5AccountId: string) => {
+    try {
+      const demoAccounts = await fetchDemoAccountAssignedTo(mt5AccountId);
+      setTeamUsers(demoAccounts);
+    } catch (error) {
+      console.error('Error fetching team users:', error);
+      setTeamUsers([]);
+    }
+  };
+
 
   const fetchUserAccounts = async () => {
     setLoading(true);
@@ -191,6 +213,15 @@ export const Dashboard = () => {
             onRefresh={handleAccountCreated}
           />
         )}
+
+        {/* Rankings Table */}
+        <div className="mb-8">
+          <RankingsTable
+            rankings={mockRankingsData[rankingType]}
+            type={rankingType}
+            onTypeChange={setRankingType}
+          />
+        </div>
 
         {/* Selected Account Dashboard */}
         {selectedAccount && (
@@ -383,6 +414,10 @@ export const Dashboard = () => {
             </div>
           </>
         )}
+
+        {teamUsers && teamUsers.length > 0 && <div className="mt-8">
+          <TeamUserTable teamUsers={teamUsers} />
+        </div>}
       </div>
     </div>
   );
