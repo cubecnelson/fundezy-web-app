@@ -1,0 +1,120 @@
+{
+    "daily": [
+        {
+            "rank": 1,
+            "teamName": "Team Alpha",
+            "netProfitAmount": 1200000,
+            "netProfitPercentage": 15.2,
+            "rankChange": 2
+        },
+        {
+            "rank": 2,
+            "teamName": "Team Beta",
+            "netProfitAmount": 1100000,
+            "netProfitPercentage": 10.5,
+            "rankChange": 0
+        },
+        {
+            "rank": 3,
+            "teamName": "Team Gamma",
+            "netProfitAmount": 950000,
+            "netProfitPercentage": 8.3,
+            "rankChange": -1
+        },
+        {
+            "rank": 4,
+            "teamName": "Team Delta",
+            "netProfitAmount": 850000,
+            "netProfitPercentage": 5.0,
+            "rankChange": 3
+        },
+        {
+            "rank": 5,
+            "teamName": "Team Epsilon",
+            "netProfitAmount": 800000,
+            "netProfitPercentage": 3.2,
+            "rankChange": -2
+        },
+        {
+            "rank": 6,
+            "teamName": "Team Zeta",
+            "netProfitAmount": 750000,
+            "netProfitPercentage": 2.8,
+            "rankChange": 0
+        },
+        {
+            "rank": 7,
+            "teamName": "Team Eta",
+            "netProfitAmount": 700000,
+            "netProfitPercentage": 1.5,
+            "rankChange": 1
+        },
+        {
+            "rank": 8,
+            "teamName": "Team Theta",
+            "netProfitAmount": 650000,
+            "netProfitPercentage": 1.0,
+            "rankChange": -1
+        },
+        {
+            "rank": 9,
+            "teamName": "Team Iota",
+            "netProfitAmount": 600000,
+            "netProfitPercentage": -0.5,
+            "rankChange": -2
+        },
+        {
+            "rank": 10,
+            "teamName": "Team Kappa",
+            "netProfitAmount": 550000,
+            "netProfitPercentage": -1.2,
+            "rankChange": -3
+        }
+    ],
+    "cumulative": [
+        {
+            "rank": 1,
+            "teamName": "Team Beta",
+            "netProfitAmount": 5500000,
+            "netProfitPercentage": 55.0,
+            "rankChange": 0
+        },
+        {
+            "rank": 2,
+            "teamName": "Team Alpha",
+            "netProfitAmount": 5200000,
+            "netProfitPercentage": 52.0,
+            "rankChange": 0
+        },
+        {
+            "rank": 3,
+            "teamName": "Team Gamma",
+            "netProfitAmount": 4800000,
+            "netProfitPercentage": 48.0,
+            "rankChange": 1
+        }
+    ],
+    "event": [
+        {
+            "rank": 1,
+            "teamName": "Team Gamma",
+            "netProfitAmount": 2500000,
+            "netProfitPercentage": 25.0,
+            "rankChange": 2
+        },
+        {
+            "rank": 2,
+            "teamName": "Team Alpha",
+            "netProfitAmount": 2300000,
+            "netProfitPercentage": 23.0,
+            "rankChange": -1
+        },
+        {
+            "rank": 3,
+            "teamName": "Team Beta",
+            "netProfitAmount": 2100000,
+            "netProfitPercentage": 21.0,
+            "rankChange": -1
+        }
+    ]
+}
