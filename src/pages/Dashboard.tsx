@@ -27,6 +27,7 @@ export const Dashboard = () => {
   const [previousTrades, setPreviousTrades] = useState<Trade[]>([]);
   const [bestTrades, setBestTrades] = useState<Trade[]>([]);
   const [worstTrades, setWorstTrades] = useState<Trade[]>([]);
+  const [showCreateAccount, setShowCreateAccount] = useState(false);
 
   useEffect(() => {
     if (user?.email) {
@@ -85,6 +86,16 @@ export const Dashboard = () => {
     }
   };
 
+  const handleCreateAccount = () => {
+    setSelectedAccount(null);
+    setShowCreateAccount(true);
+  };
+
+  const handleAccountCreated = async () => {
+    await fetchUserAccounts();
+    setShowCreateAccount(false);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
@@ -100,26 +111,31 @@ export const Dashboard = () => {
     { label: 'Positive total gain', status: stats.totalGainPercent > 0 },
   ] : [];
 
+  const activeAccounts = mt5Accounts.filter(account => account.status === 'active');
+  const showDemoAccountSection = activeAccounts.length < 3;
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <div className="mx-auto max-w-7xl px-4 py-8">
-        {/* Get Demo Account Section */}
-        <div className="mb-8 bg-gray-50 dark:bg-gray-800 rounded-lg p-12">
-          <div className="text-center">
-            <button
-              onClick={() => setSelectedAccount(null)}
-              className="inline-flex items-center justify-center p-4 rounded-full bg-fundezy-red text-white hover:bg-red-600 transition-colors"
-            >
-              <PlusIcon className="h-8 w-8" />
-            </button>
-            <h2 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">
-              Get a Free Demo Account
-            </h2>
-            <p className="mt-2 text-gray-600 dark:text-gray-300">
-              Start trading with virtual funds and prove your skills
-            </p>
+        {/* Get Demo Account Section - Only show if less than 3 active accounts */}
+        {showDemoAccountSection && (
+          <div className="mb-8 bg-gray-50 dark:bg-gray-800 rounded-lg p-12">
+            <div className="text-center">
+              <button
+                onClick={handleCreateAccount}
+                className="inline-flex items-center justify-center p-4 rounded-full bg-fundezy-red text-white hover:bg-red-600 transition-colors"
+              >
+                <PlusIcon className="h-8 w-8" />
+              </button>
+              <h2 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">
+                Get a Free Demo Account
+              </h2>
+              <p className="mt-2 text-gray-600 dark:text-gray-300">
+                Start trading with virtual funds and prove your skills
+              </p>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* MT5 Accounts List */}
         <div className="mb-8">
@@ -130,7 +146,10 @@ export const Dashboard = () => {
             {mt5Accounts.map((account) => (
               <button
                 key={account.id}
-                onClick={() => setSelectedAccount(account)}
+                onClick={() => {
+                  setSelectedAccount(account);
+                  setShowCreateAccount(false);
+                }}
                 className={`p-4 rounded-lg border ${
                   selectedAccount?.id === account.id
                     ? 'border-fundezy-red bg-fundezy-red/10 dark:bg-fundezy-red/20'
@@ -158,6 +177,20 @@ export const Dashboard = () => {
             ))}
           </div>
         </div>
+
+        {/* MT5 Credentials for Create Account */}
+        {showCreateAccount && (
+          <MT5Credentials
+            server=""
+            login=""
+            password=""
+            loading={false}
+            error={null}
+            email={user?.email ?? ''}
+            status="active"
+            onRefresh={handleAccountCreated}
+          />
+        )}
 
         {/* Selected Account Dashboard */}
         {selectedAccount && (

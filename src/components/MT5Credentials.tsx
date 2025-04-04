@@ -22,6 +22,7 @@ export const MT5Credentials = ({ server, login, password, loading, error, email,
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [copiedLogin, setCopiedLogin] = useState(false);
   const [copiedPassword, setCopiedPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     // Show overlay if credentials are empty or account is inactive
@@ -31,13 +32,20 @@ export const MT5Credentials = ({ server, login, password, loading, error, email,
   const handleCreateDemoAccount = async () => {
     setCreatingAccount(true);
     setCreateAccountError(null);
+    setSuccessMessage(null);
 
     try {
       const result = await createDemoAccount(email);
       
       if (result.success) {
+        setSuccessMessage('Demo account created successfully!');
         await onRefresh();
         setShowOverlay(false);
+        
+        // Clear success message after 3 seconds
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 3000);
       } else {
         setCreateAccountError(result.message);
         if (result.message.includes('No demo accounts available')) {
@@ -84,7 +92,10 @@ export const MT5Credentials = ({ server, login, password, loading, error, email,
     return (
       <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-8">
         <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">MT5 Credentials</h3>
-        <div className="text-center text-gray-600 dark:text-gray-400">Loading credentials...</div>
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-fundezy-red"></div>
+          <span className="ml-3 text-gray-600 dark:text-gray-400">Loading credentials...</span>
+        </div>
       </div>
     );
   }
@@ -114,6 +125,13 @@ export const MT5Credentials = ({ server, login, password, loading, error, email,
           </button>
         )}
       </div>
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className="mb-4 p-3 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded">
+          {successMessage}
+        </div>
+      )}
       
       {/* Credentials Grid */}
       <div className="grid grid-cols-3 gap-4">
@@ -227,9 +245,16 @@ export const MT5Credentials = ({ server, login, password, loading, error, email,
                   <button
                     onClick={handleCreateDemoAccount}
                     disabled={creatingAccount}
-                    className="w-full bg-fundezy-red text-white py-2 px-4 rounded hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-fundezy-red text-white py-2 px-4 rounded hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                   >
-                    {creatingAccount ? 'Creating Account...' : 'Create Demo Account'}
+                    {creatingAccount ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
+                        Creating Account...
+                      </>
+                    ) : (
+                      'Create Demo Account'
+                    )}
                   </button>
                 )}
               </div>
