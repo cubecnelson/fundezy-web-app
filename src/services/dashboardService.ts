@@ -1,11 +1,5 @@
 import mockData from '../data/mockDashboardData.json';
 
-export interface MT5Credentials {
-  server: string;
-  login: string;
-  password: string;
-}
-
 export interface Stats {
   rank: number;
   totalTraders: number;
@@ -23,39 +17,22 @@ export interface EquityData {
   failingMark: number;
 }
 
-export interface UnderwaterData {
-  date: string;
-  drawdown: number;
-}
-
 export interface Trade {
   id: number;
   symbol: string;
   type: string;
   profit: number;
   date: string;
+  time: string;
 }
 
-export interface DashboardData {
-  mt5Credentials: MT5Credentials;
-  stats: Stats;
-  equityData: EquityData[];
-  underwaterData: UnderwaterData[];
-  previousTrades: Trade[];
-  bestTrades: Trade[];
-  worstTrades: Trade[];
+export interface UnderwaterData {
+  date: string;
+  drawdown: number;
 }
 
 // Mock API calls that return promises to simulate real API behavior
 export const dashboardService = {
-  getMT5Credentials: async (): Promise<MT5Credentials> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mockData.mt5Credentials);
-      }, 500);
-    });
-  },
-
   getStats: async (): Promise<Stats> => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -88,9 +65,9 @@ export const dashboardService = {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({
-          previousTrades: mockData.previousTrades,
+          previousTrades: mockData.previousTrades.slice(0, 5),
           bestTrades: mockData.bestTrades,
-          worstTrades: mockData.worstTrades,
+          worstTrades: mockData.worstTrades
         });
       }, 500);
     });

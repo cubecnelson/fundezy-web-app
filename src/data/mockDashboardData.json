@@ -28,24 +28,26 @@
     { "date": "2023-01-05", "drawdown": 0 }
   ],
   "previousTrades": [
-    { "id": 1, "symbol": "EURUSD", "type": "BUY", "profit": 150, "date": "2023-01-05" },
-    { "id": 2, "symbol": "GBPUSD", "type": "SELL", "profit": -50, "date": "2023-01-05" },
-    { "id": 3, "symbol": "USDJPY", "type": "BUY", "profit": 200, "date": "2023-01-04" }
+    { "id": 1, "symbol": "EURUSD", "type": "BUY", "profit": 150, "date": "2024-02-05", "time": "15:30:00" },
+    { "id": 2, "symbol": "GBPUSD", "type": "SELL", "profit": -50, "date": "2024-02-05", "time": "14:15:00" },
+    { "id": 3, "symbol": "USDJPY", "type": "BUY", "profit": 200, "date": "2024-02-04", "time": "16:20:00" },
+    { "id": 4, "symbol": "AUDUSD", "type": "SELL", "profit": 75, "date": "2024-02-04", "time": "13:10:00" },
+    { "id": 5, "symbol": "EURJPY", "type": "BUY", "profit": -120, "date": "2024-02-04", "time": "10:45:00" }
   ],
   "bestTrades": [
-    { "id": 1, "symbol": "EURUSD", "type": "BUY", "profit": 450, "date": "2023-01-03" },
-    { "id": 2, "symbol": "GBPJPY", "type": "SELL", "profit": 380, "date": "2023-01-04" },
-    { "id": 3, "symbol": "USDJPY", "type": "BUY", "profit": 320, "date": "2023-01-02" },
-    { "id": 4, "symbol": "AUDUSD", "type": "BUY", "profit": 290, "date": "2023-01-05" },
-    { "id": 5, "symbol": "USDCAD", "type": "SELL", "profit": 275, "date": "2023-01-01" },
-    { "id": 6, "symbol": "EURJPY", "type": "BUY", "profit": 260, "date": "2023-01-03" }
+    { "id": 1, "symbol": "EURUSD", "type": "BUY", "profit": 450, "date": "2024-02-03", "time": "15:30:00" },
+    { "id": 2, "symbol": "GBPJPY", "type": "SELL", "profit": 380, "date": "2024-02-04", "time": "14:15:00" },
+    { "id": 3, "symbol": "USDJPY", "type": "BUY", "profit": 320, "date": "2024-02-02", "time": "11:45:00" },
+    { "id": 4, "symbol": "AUDUSD", "type": "BUY", "profit": 290, "date": "2024-02-05", "time": "16:20:00" },
+    { "id": 5, "symbol": "USDCAD", "type": "SELL", "profit": 275, "date": "2024-02-01", "time": "13:10:00" },
+    { "id": 6, "symbol": "EURJPY", "type": "BUY", "profit": 260, "date": "2024-02-03", "time": "10:45:00" }
   ],
   "worstTrades": [
-    { "id": 1, "symbol": "GBPUSD", "type": "SELL", "profit": -320, "date": "2023-01-02" },
-    { "id": 2, "symbol": "EURUSD", "type": "BUY", "profit": -280, "date": "2023-01-04" },
-    { "id": 3, "symbol": "USDJPY", "type": "SELL", "profit": -250, "date": "2023-01-03" },
-    { "id": 4, "symbol": "AUDUSD", "type": "SELL", "profit": -220, "date": "2023-01-05" },
-    { "id": 5, "symbol": "USDCHF", "type": "BUY", "profit": -190, "date": "2023-01-01" },
-    { "id": 6, "symbol": "EURJPY", "type": "SELL", "profit": -175, "date": "2023-01-03" }
+    { "id": 1, "symbol": "GBPUSD", "type": "SELL", "profit": -320, "date": "2024-02-02", "time": "15:30:00" },
+    { "id": 2, "symbol": "EURUSD", "type": "BUY", "profit": -280, "date": "2024-02-04", "time": "14:15:00" },
+    { "id": 3, "symbol": "USDJPY", "type": "SELL", "profit": -250, "date": "2024-02-03", "time": "11:45:00" },
+    { "id": 4, "symbol": "AUDUSD", "type": "SELL", "profit": -220, "date": "2024-02-05", "time": "16:20:00" },
+    { "id": 5, "symbol": "USDCHF", "type": "BUY", "profit": -190, "date": "2024-02-01", "time": "13:10:00" },
+    { "id": 6, "symbol": "EURJPY", "type": "SELL", "profit": -175, "date": "2024-02-03", "time": "10:45:00" }
   ]
 }

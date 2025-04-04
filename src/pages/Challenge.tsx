@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
+import { WaitingListModal } from '../components/WaitingListModal';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const tiers = [
   {
@@ -54,7 +57,17 @@ function classNames(...classes: string[]) {
 }
 
 export default function Challenge() {
-  const [, setSelectedTier] = useState(tiers[1]);
+  const [isWaitingListOpen, setIsWaitingListOpen] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleDemoSignUp = () => {
+    if (user) {
+      navigate('/dashboard');
+    } else {
+      navigate('/signin');
+    }
+  };
 
   return (
     <div className="py-24 sm:py-32">
@@ -76,7 +89,7 @@ export default function Challenge() {
               <div>
                 <h3 className="text-2xl font-bold text-fundezy-red mb-2">Try Demo Account - Free</h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  Start with a $100,000 virtual account. Practice your trading strategies risk-free for 4 weeks.
+                  Start with up to $200,000 virtual account. Practice your trading strategies risk-free for 4 weeks.
                 </p>
                 <ul className="mt-4 space-y-2">
                   <li className="flex items-center gap-x-2 text-gray-600 dark:text-gray-300">
@@ -93,8 +106,11 @@ export default function Challenge() {
                   </li>
                 </ul>
               </div>
-              <button className="bg-fundezy-red text-white px-8 py-3 rounded-md hover:bg-red-600 transition-colors font-semibold">
-                Start Demo Now
+              <button
+                onClick={handleDemoSignUp}
+                className="bg-fundezy-red text-white px-8 py-3 rounded-md hover:bg-red-600 transition-colors font-semibold"
+              >
+                Sign up now
               </button>
             </div>
           </div>
@@ -135,7 +151,7 @@ export default function Challenge() {
                 ))}
               </ul>
               <button
-                onClick={() => setSelectedTier(tier)}
+                onClick={() => setIsWaitingListOpen(true)}
                 className={classNames(
                   tier.featured
                     ? 'bg-fundezy-red text-white shadow-sm hover:bg-red-600'
@@ -143,12 +159,17 @@ export default function Challenge() {
                   'mt-8 block w-full rounded-md py-2 px-3 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fundezy-red'
                 )}
               >
-                Get started today
+                Join Waiting List
               </button>
             </div>
           ))}
         </div>
       </div>
+
+      <WaitingListModal
+        isOpen={isWaitingListOpen}
+        onClose={() => setIsWaitingListOpen(false)}
+      />
     </div>
   );
 }

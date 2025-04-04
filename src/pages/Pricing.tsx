@@ -1,8 +1,11 @@
+import { useState } from 'react';
+import { CheckIcon } from '@heroicons/react/24/outline';
+import { WaitingListModal } from '../components/WaitingListModal';
+
 const tiers = [
   {
     name: 'Standard Challenge',
     id: 'tier-standard',
-    href: '/challenge',
     priceMonthly: 299,
     description: 'Perfect for new traders starting their journey.',
     features: [
@@ -19,7 +22,6 @@ const tiers = [
   {
     name: 'Professional Challenge',
     id: 'tier-professional',
-    href: '/challenge',
     priceMonthly: 599,
     description: 'For experienced traders ready to scale.',
     features: [
@@ -37,7 +39,6 @@ const tiers = [
   {
     name: 'Enterprise Challenge',
     id: 'tier-enterprise',
-    href: '/challenge',
     priceMonthly: 999,
     description: 'For professional traders seeking maximum opportunity.',
     features: [
@@ -61,6 +62,8 @@ function classNames(...classes: string[]) {
 }
 
 export default function Pricing() {
+  const [isWaitingListOpen, setIsWaitingListOpen] = useState(false);
+
   return (
     <div className="bg-white dark:bg-gray-900 py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -103,37 +106,31 @@ export default function Pricing() {
               <ul role="list" className="mt-8 space-y-3 text-sm leading-6 text-gray-600 dark:text-gray-300">
                 {tier.features.map((feature) => (
                   <li key={feature} className="flex gap-x-3">
-                    <svg
-                      className="h-6 w-5 flex-none text-fundezy-red"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <CheckIcon className="h-6 w-5 flex-none text-fundezy-red" aria-hidden="true" />
                     {feature}
                   </li>
                 ))}
               </ul>
-              <a
-                href={tier.href}
+              <button
+                onClick={() => setIsWaitingListOpen(true)}
                 className={classNames(
                   tier.featured
                     ? 'bg-fundezy-red text-white shadow-sm hover:bg-red-600'
                     : 'text-fundezy-red ring-1 ring-inset ring-fundezy-red hover:ring-red-600 dark:ring-red-500 dark:hover:ring-red-400',
-                  'mt-8 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fundezy-red'
+                  'mt-8 block w-full rounded-md py-2 px-3 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fundezy-red'
                 )}
               >
-                Get started today
-              </a>
+                Join Waiting List
+              </button>
             </div>
           ))}
         </div>
       </div>
+
+      <WaitingListModal
+        isOpen={isWaitingListOpen}
+        onClose={() => setIsWaitingListOpen(false)}
+      />
     </div>
   );
 }

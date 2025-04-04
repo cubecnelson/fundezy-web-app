@@ -20,10 +20,22 @@ interface DemoAccount {
   server: string;
   login: string;
   password: string;
-  assignedTo?: string;
+  assignedTo?: string | null;
 }
 
-export const fetchMT5Account = async (email: string): Promise<MT5Account> => {
+interface AuditLog {
+  action: string;
+  email: string;
+  mt5AccountId: string;
+  timestamp: Date;
+  details: {
+    server: string;
+    login: string;
+    previousStatus: string;
+  };
+}
+
+export const fetchMT5Account = async (email: string): Promise<MT5Account[]> => {
   if (!email) {
     throw new Error('Email is required to fetch MT5 account');
   }
@@ -31,63 +43,179 @@ export const fetchMT5Account = async (email: string): Promise<MT5Account> => {
   try {
     const response = await fetch(`https://mt5accounts-6wrzc5r7aq-uc.a.run.app/email/${email}`);
     if (!response.ok) {
-      throw new Error('Failed to fetch MT5 account');
+      throw new Error(`Failed to fetch MT5 account: ${response.statusText}`);
     }
     const data = await response.json();
-    if (!data || !data[0]) {
-      throw new Error('No MT5 account found for this email');
-    }
-    return data[0];
+    return data;
   } catch (error) {
     console.error('Error fetching MT5 account:', error);
     throw error;
   }
 };
 
-export const createDemoAccount = async (email: string): Promise<{ success: boolean; message: string }> => {
-  if (!email) {
-    throw new Error('Email is required to create demo account');
-  }
-
+const logAccountRemoval = async (auditData: AuditLog): Promise<void> => {
   try {
-    // 1. Get available demo account
-    const availableResponse = await fetch('https://us-central1-fundezy-app.cloudfunctions.net/demoAccounts/available');
-    if (!availableResponse.ok) {
-      throw new Error('No demo accounts available');
-    }
-    const demoAccount: DemoAccount = await availableResponse.json();
+    const response = await fetch('https://us-central1-fundezy-app.cloudfunctions.net/audit_logs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(auditData),
+    });
 
-    // 2. Get MT5 account for the email
-    const mt5AccountResponse = await fetch(`https://mt5accounts-6wrzc5r7aq-uc.a.run.app/email/${email}`);
-    if (!mt5AccountResponse.ok) {
-      throw new Error('Failed to fetch MT5 account');
+    if (!response.ok) {
+      throw new Error('Failed to log account removal');
     }
-    const mt5Accounts = await mt5AccountResponse.json();
-    if (!mt5Accounts || !mt5Accounts[0]) {
-      throw new Error('No MT5 account found for this email');
-    }
-    const mt5Account = mt5Accounts[0];
+  } catch (error) {
+    console.error('Error logging account removal:', error);
+    throw error;
+  }
+};
 
-    // 3. Update MT5 account with demo account credentials
-    const updateResponse = await fetch(`https://mt5accounts-6wrzc5r7aq-uc.a.run.app/${mt5Account.id}`, {
+export const clearMT5Account = async (account: MT5Account): Promise<void> => {
+  try {
+    // Log the account removal first
+    await logAccountRemoval({
+      action: 'ACCOUNT_REMOVED',
+      email: account.email,
+      mt5AccountId: account.id,
+      timestamp: new Date(),
+      details: {
+        server: account.server,
+        login: account.login,
+        previousStatus: account.status
+      }
+    });
+
+    // Clear the MT5 account credentials
+    const response = await fetch(`https://mt5accounts-6wrzc5r7aq-uc.a.run.app/${account.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        server: demoAccount.server,
-        login: demoAccount.login,
-        password: demoAccount.password,
-        email: mt5Account.email,
-        status: 'active',
+        ...account,
+        login: '',
+        password: '',
+        status: 'inactive',
+        updatedAt: new Date()
       }),
     });
 
-    if (!updateResponse.ok) {
-      throw new Error('Failed to update MT5 account');
+    if (!response.ok) {
+      throw new Error('Failed to clear MT5 account');
+    }
+  } catch (error) {
+    console.error('Error clearing MT5 account:', error);
+    throw error;
+  }
+};
+
+export const createDemoAccount = async (email: string): Promise<{ success: boolean; message: string }> => {
+  if (!email) {
+    return {
+      success: false,
+      message: 'Email is required to create demo account'
+    };
+  }
+
+  try {
+    // 1. Get available demo account
+    const availableResponse = await fetch('https://us-central1-fundezy-app.cloudfunctions.net/demoAccounts/available');
+    
+    // Check if response is empty (no content)
+    if (availableResponse.status === 204) {
+      return {
+        success: false,
+        message: 'No demo accounts available. Please join our waiting list.'
+      };
     }
 
-    // 4. Assign demo account to MT5 account
+    if (!availableResponse.ok) {
+      throw new Error(`Failed to check demo account availability: ${availableResponse.statusText}`);
+    }
+
+    const responseText = await availableResponse.text();
+    if (!responseText) {
+      return {
+        success: false,
+        message: 'No demo accounts available. Please join our waiting list.'
+      };
+    }
+
+    let demoAccount: DemoAccount;
+    try {
+      demoAccount = JSON.parse(responseText);
+    } catch (error) {
+      console.error('Error parsing demo account response:', error);
+      return {
+        success: false,
+        message: 'No demo accounts available. Please join our waiting list.'
+      };
+    }
+
+    if (!demoAccount || !demoAccount.id) {
+      return {
+        success: false,
+        message: 'No demo accounts available. Please join our waiting list.'
+      };
+    }
+
+    // 2. Create MT5 account if it doesn't exist
+    let mt5Account;
+    try {
+      const mt5AccountResponse = await fetch(`https://mt5accounts-6wrzc5r7aq-uc.a.run.app/email/${email}`);
+      if (mt5AccountResponse.ok) {
+        const accounts = await mt5AccountResponse.json();
+        mt5Account = accounts[0];
+      }
+    } catch (error) {
+      console.log('No existing MT5 account found, creating new one');
+    }
+
+    if (!mt5Account) {
+      // Create new MT5 account
+      const createResponse = await fetch('https://mt5accounts-6wrzc5r7aq-uc.a.run.app/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          server: demoAccount.server,
+          login: demoAccount.login,
+          password: demoAccount.password,
+          email: email,
+          status: 'active',
+        }),
+      });
+
+      if (!createResponse.ok) {
+        throw new Error(`Failed to create MT5 account: ${createResponse.statusText}`);
+      }
+
+      mt5Account = await createResponse.json();
+    } else {
+      // Update existing MT5 account
+      const updateResponse = await fetch(`https://mt5accounts-6wrzc5r7aq-uc.a.run.app/${mt5Account.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          server: demoAccount.server,
+          login: demoAccount.login,
+          password: demoAccount.password,
+          email: email,
+          status: 'active',
+        }),
+      });
+
+      if (!updateResponse.ok) {
+        throw new Error(`Failed to update MT5 account: ${updateResponse.statusText}`);
+      }
+    }
+
+    // 4. Assign demo account
     const assignResponse = await fetch(
       `https://us-central1-fundezy-app.cloudfunctions.net/demoAccounts/assign/${demoAccount.id}`,
       {
@@ -102,7 +230,7 @@ export const createDemoAccount = async (email: string): Promise<{ success: boole
     );
 
     if (!assignResponse.ok) {
-      throw new Error('Failed to assign demo account with id');
+      throw new Error(`Failed to assign demo account: ${assignResponse.statusText}`);
     }
 
     return {

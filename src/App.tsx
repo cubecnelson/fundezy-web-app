@@ -9,6 +9,7 @@ import { HowItWorks } from './pages/HowItWorks';
 import Pricing from './pages/Pricing';
 import SignIn from './pages/SignIn';
 import InvestorRelations from './pages/InvestorRelations';
+import Admin from './pages/Admin';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
@@ -31,7 +32,7 @@ export default function App() {
       <Router>
         <div className="min-h-screen bg-white dark:bg-gray-900">
           <Navbar />
-          <main className="container mx-auto px-4 py-8">
+          <main>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/signin" element={<SignIn />} />
@@ -48,6 +49,7 @@ export default function App() {
               <Route path="/investor-relations" element={<InvestorRelations />} />
               <Route path="/how-it-works" element={<HowItWorks />} />
               <Route path="/pricing" element={<Pricing />} />
+              <Route path="/admin" element={<Admin />} />
             </Routes>
           </main>
           <Footer />
