@@ -138,6 +138,7 @@ export const adminService = {
 
       // Log the status change
       await fetch(AUDIT_URL, {
+        mode: 'no-cors',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
