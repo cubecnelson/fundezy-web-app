@@ -71,7 +71,7 @@ export const Dashboard = () => {
       const activeAccount = accounts.find((acc: MT5Account) => acc.status === 'active');
       if (activeAccount) {
         setSelectedAccount(activeAccount);
-        await fetchDashboardData();
+        await fetchDashboardData(activeAccount.id);
       }
     } catch (err) {
       console.error('Error fetching MT5 accounts:', err);
@@ -81,7 +81,7 @@ export const Dashboard = () => {
     }
   };
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = async (mdAccountId: string) => {
     try {
       const [
         statsData,
@@ -89,10 +89,10 @@ export const Dashboard = () => {
         underwaterDataResult,
         tradesData,
       ] = await Promise.all([
-        dashboardService.getStats(),
-        dashboardService.getEquityData(),
-        dashboardService.getUnderwaterData(),
-        dashboardService.getTrades(),
+        dashboardService.getStats(mdAccountId),
+        dashboardService.getEquityData(mdAccountId),
+        dashboardService.getUnderwaterData(mdAccountId),
+        dashboardService.getTrades(mdAccountId),
       ]);
 
       setStats(statsData);
