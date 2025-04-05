@@ -72,6 +72,7 @@ export const Dashboard = () => {
       if (activeAccount) {
         setSelectedAccount(activeAccount);
         await fetchDashboardData(activeAccount.id);
+        
       }
     } catch (err) {
       console.error('Error fetching MT5 accounts:', err);
@@ -103,7 +104,6 @@ export const Dashboard = () => {
       setWorstTrades(tradesData.worstTrades);
       setError(null);
     } catch (err) {
-      setError('Failed to load dashboard data');
       console.error('Error loading dashboard data:', err);
     }
   };
