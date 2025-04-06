@@ -34,10 +34,31 @@ export interface UnderwaterData {
   drawdown: number;
 }
 
+export interface DashboardData {
+  tradingMetrics: Stats;
+  equityData: EquityData[];
+  underwaterData: UnderwaterData[];
+  tradeHistory: {
+    previousTrades: Trade[];
+    bestTrades: Trade[];
+    worstTrades: Trade[];
+  };
+}
+
 const API_BASE_URL = 'https://us-central1-fundezy-app.cloudfunctions.net/tradeData';
 
 // Mock API calls that return promises to simulate real API behavior
 export const dashboardService = {
+
+  getDashboardTradeData: async (mdAccountId: string): Promise<DashboardData> => {
+    const response = await fetch(`${API_BASE_URL}/${mdAccountId}`);
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error('Failed to fetch dashboard data');
+    }
+    return data.data;
+  },
+
   getStats: async (mdAccountId: string): Promise<Stats> => {
     const response = await fetch(`${API_BASE_URL}/${mdAccountId}`);
     const data = await response.json();

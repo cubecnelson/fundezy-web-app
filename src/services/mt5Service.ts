@@ -1,4 +1,5 @@
 export interface MT5Account {
+  challengeId: string | undefined;
   id: string;
   server: string;
   login: string;

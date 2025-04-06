@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 interface MT5Credentials {
   server: string;
@@ -17,6 +18,8 @@ export default function MT5Test() {
   });
   const [showHelp, setShowHelp] = useState(false);
   const [useIframe, setUseIframe] = useState(true);
+
+  useAnalytics('MT5 Test');
 
   const getTerminalUrl = (useReadOnly: boolean = false) => {
     const params = new URLSearchParams({

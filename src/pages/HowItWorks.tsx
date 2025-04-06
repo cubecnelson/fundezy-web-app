@@ -1,4 +1,8 @@
+import { useAnalytics } from '../hooks/useAnalytics';
+
 export const HowItWorks = () => {
+  useAnalytics('How It Works');
+
   const steps = [
     {
       name: 'Step 1: Fundezy Challenge',

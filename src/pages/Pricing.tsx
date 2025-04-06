@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { WaitingListModal } from '../components/WaitingListModal';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 const tiers = [
   {
@@ -63,6 +64,7 @@ function classNames(...classes: string[]) {
 
 export default function Pricing() {
   const [isWaitingListOpen, setIsWaitingListOpen] = useState(false);
+  useAnalytics('Pricing');
 
   return (
     <div className="bg-white dark:bg-gray-900 py-24 sm:py-32">

@@ -17,6 +17,9 @@ import { RankingsTable, type RankingType } from '../components/RankingsTable';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import mockRankingsData from '../data/mockRankingsData.json';
 import TeamUserTable from '../components/TeamUserTable';
+import { Challenge, challengeService } from '../services/challengeService';
+import { useAnalytics } from '../hooks/useAnalytics';
+
 export const Dashboard = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -32,7 +35,9 @@ export const Dashboard = () => {
   const [showCreateAccount, setShowCreateAccount] = useState(false);
   const [rankingType, setRankingType] = useState<RankingType>('daily');
   const [teamUsers, setTeamUsers] = useState<DemoAccount[]>([]);
+  const [challenges, setChallenges] = useState<Challenge[]>([]);
 
+  useAnalytics('Dashboard');
 
   useEffect(() => {
     if (user?.email) {
@@ -41,8 +46,15 @@ export const Dashboard = () => {
   }, [user?.email]);
 
   useEffect(() => {
+      const challengeIdList = mt5Accounts.map((account) => account.challengeId).filter((id) => id !== undefined);
+      fetchChallenges(challengeIdList);
+  }, [mt5Accounts]);
+
+  useEffect(() => {
     if (selectedAccount?.id) {
       fetchTeamUsers(selectedAccount?.id);
+
+      fetchDashboardData(selectedAccount.id);
     }
   }, [selectedAccount?.id]);
 
@@ -55,6 +67,18 @@ export const Dashboard = () => {
       setTeamUsers([]);
     }
   };
+
+  const fetchChallenges = async (challengeIdList: string[]) => {
+    if (challengeIdList.length <= 0) return;
+    try {
+      const challenges = await challengeService.getAllChallenges();
+      const filteredChallenges = challenges.filter((challenge) => challengeIdList.includes(challenge.id));
+      setChallenges(filteredChallenges);
+    } catch (error) {
+      console.error('Error fetching challenges:', error);
+    }
+  }
+  
 
 
   const fetchUserAccounts = async () => {
@@ -71,7 +95,6 @@ export const Dashboard = () => {
       const activeAccount = accounts.find((acc: MT5Account) => acc.status === 'active');
       if (activeAccount) {
         setSelectedAccount(activeAccount);
-        await fetchDashboardData(activeAccount.id);
         
       }
     } catch (err) {
@@ -84,17 +107,11 @@ export const Dashboard = () => {
 
   const fetchDashboardData = async (mdAccountId: string) => {
     try {
-      const [
-        statsData,
-        equityDataResult,
-        underwaterDataResult,
-        tradesData,
-      ] = await Promise.all([
-        dashboardService.getStats(mdAccountId),
-        dashboardService.getEquityData(mdAccountId),
-        dashboardService.getUnderwaterData(mdAccountId),
-        dashboardService.getTrades(mdAccountId),
-      ]);
+      const data = await dashboardService.getDashboardTradeData(mdAccountId);
+      const statsData = data.tradingMetrics;
+      const equityDataResult = data.equityData;
+      const underwaterDataResult = data.underwaterData;
+      const tradesData = data.tradeHistory;
 
       setStats(statsData);
       setEquityData(equityDataResult);
@@ -136,6 +153,9 @@ export const Dashboard = () => {
   const activeAccounts = mt5Accounts.filter(account => account.status === 'active');
   const showDemoAccountSection = activeAccounts.length < 3;
 
+  const selectedAccountIsEducation = selectedAccount?.challengeId && challenges.find(c => c.id === selectedAccount.challengeId)?.isEducation;
+  const selectedAccountDisplayDashboard = selectedAccount?.challengeId && challenges.find(c => c.id === selectedAccount.challengeId)?.displayDashboard;
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <div className="mx-auto max-w-7xl px-4 py-8">
@@ -165,7 +185,7 @@ export const Dashboard = () => {
             Your Trading Accounts
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {mt5Accounts.map((account) => (
+            {...mt5Accounts.map((account) => (
               <button
                 key={account.id}
                 onClick={() => {
@@ -186,6 +206,13 @@ export const Dashboard = () => {
                     <p className="text-sm text-gray-600 dark:text-gray-300">
                       Server: {account.server}
                     </p>
+                    <div className='h-6'>
+                    {account.challengeId && challenges.find(c => c.id === account.challengeId)?.isEducation && (
+                      <span className="inline-flex items-center mt-1 px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+                        Education
+                      </span>
+                    )}
+                    </div>
                   </div>
                   <div className={`px-2 py-1 rounded-full text-xs font-medium ${
                     account.status === 'active'
@@ -215,13 +242,15 @@ export const Dashboard = () => {
         )}
 
         {/* Rankings Table */}
-        <div className="mb-8">
-          <RankingsTable
-            rankings={mockRankingsData[rankingType]}
-            type={rankingType}
-            onTypeChange={setRankingType}
-          />
-        </div>
+        {selectedAccountDisplayDashboard && selectedAccountIsEducation && (
+          <div className="mb-8">
+            <RankingsTable
+              rankings={mockRankingsData[rankingType]}
+              type={rankingType}
+                onTypeChange={setRankingType}
+              />
+            </div>
+        )}
 
         {/* Selected Account Dashboard */}
         {selectedAccount && (

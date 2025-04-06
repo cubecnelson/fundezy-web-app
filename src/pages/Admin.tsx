@@ -7,6 +7,7 @@ import { DemoAccountsList } from '../components/admin/DemoAccountsList';
 import { CreateDemoAccount } from '../components/admin/CreateDemoAccount';
 import { MT5AccountsList } from '../components/admin/MT5AccountsList';
 import { AccountLinking } from '../components/admin/AccountLinking';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -17,6 +18,8 @@ export default function Admin() {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  useAnalytics('Admin');
 
   useEffect(() => {
     const checkAdminStatus = async () => {
