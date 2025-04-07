@@ -1,4 +1,8 @@
+import { useAnalytics } from '../hooks/useAnalytics';
+
 export const Home = () => {
+  useAnalytics('Home');
+
   const features = [
     'Trade with up to $100,000 funded account',
     'Keep up to 80% of your profits',

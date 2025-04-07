@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 export default function SignIn() {
   const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
@@ -9,6 +10,8 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState('');
+
+  useAnalytics('Sign In');
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();

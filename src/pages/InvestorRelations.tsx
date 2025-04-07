@@ -12,6 +12,7 @@ import {
   ChartOptions
 } from 'chart.js';
 import { Chart } from 'chart.js/auto';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 ChartJS.register(
   CategoryScale,
@@ -76,6 +77,8 @@ export default function InvestorRelations() {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstance = useRef<Chart | null>(null);
   const [expandedHighlight, setExpandedHighlight] = useState<number | null>(null);
+
+  useAnalytics('Investor Relations');
 
   useEffect(() => {
     if (chartRef.current) {

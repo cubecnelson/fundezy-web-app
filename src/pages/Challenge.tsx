@@ -3,6 +3,7 @@ import { CheckIcon } from '@heroicons/react/24/outline';
 import { WaitingListModal } from '../components/WaitingListModal';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 const tiers = [
   {
@@ -60,6 +61,7 @@ export default function Challenge() {
   const [isWaitingListOpen, setIsWaitingListOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
+  useAnalytics('Challenge');
 
   const handleDemoSignUp = () => {
     if (user) {

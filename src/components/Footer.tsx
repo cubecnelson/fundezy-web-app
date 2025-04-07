@@ -7,14 +7,12 @@ export const Footer = () => {
           <a href="/investor-relations" className="text-sm text-gray-400 hover:text-fundezy-red">Investor Relations</a>
           <a href="/how-it-works" className="text-sm text-gray-400 hover:text-fundezy-red">How It Works</a>
           <a href="/pricing" className="text-sm text-gray-400 hover:text-fundezy-red">Pricing</a>
-          <a href="/faq" className="text-sm text-gray-400 hover:text-fundezy-red">FAQ</a>
-          <a href="/contact" className="text-sm text-gray-400 hover:text-fundezy-red">Contact</a>
         </nav>
         <div className="mt-8 flex justify-center space-x-6">
-          <a href="#" className="text-gray-400 hover:text-fundezy-red">
+          <a href="https://t.me/+UNeJtf7TC_VjZjJl]" target="_blank" className="text-gray-400 hover:text-fundezy-red">
             <span className="sr-only">Twitter</span>
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+            <svg className="h-12 w-12" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09"/>
             </svg>
           </a>
         </div>

@@ -1,4 +1,4 @@
-import mockData from '../data/mockDashboardData.json';
+// import mockData from '../data/mockDashboardData.json';
 
 export interface Stats {
   rank: number;
@@ -24,6 +24,9 @@ export interface Trade {
   profit: number;
   date: string;
   time: string;
+  lotSize?: number;
+  openPrice?: number;
+  closePrice?: number;
 }
 
 export interface UnderwaterData {
@@ -31,45 +34,72 @@ export interface UnderwaterData {
   drawdown: number;
 }
 
+export interface DashboardData {
+  tradingMetrics: Stats;
+  equityData: EquityData[];
+  underwaterData: UnderwaterData[];
+  tradeHistory: {
+    previousTrades: Trade[];
+    bestTrades: Trade[];
+    worstTrades: Trade[];
+  };
+}
+
+const API_BASE_URL = 'https://us-central1-fundezy-app.cloudfunctions.net/tradeData';
+
 // Mock API calls that return promises to simulate real API behavior
 export const dashboardService = {
-  getStats: async (): Promise<Stats> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mockData.stats);
-      }, 500);
-    });
+
+  getDashboardTradeData: async (mdAccountId: string): Promise<DashboardData> => {
+    const response = await fetch(`${API_BASE_URL}/${mdAccountId}`);
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error('Failed to fetch dashboard data');
+    }
+    return data.data;
   },
 
-  getEquityData: async (): Promise<EquityData[]> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mockData.equityData);
-      }, 500);
-    });
+  getStats: async (mdAccountId: string): Promise<Stats> => {
+    const response = await fetch(`${API_BASE_URL}/${mdAccountId}`);
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error('Failed to fetch stats');
+    }
+    return data.data.tradingMetrics;
   },
 
-  getUnderwaterData: async (): Promise<UnderwaterData[]> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(mockData.underwaterData);
-      }, 500);
-    });
+  getEquityData: async (mdAccountId: string): Promise<EquityData[]> => {
+    const response = await fetch(`${API_BASE_URL}/${mdAccountId}`);
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error('Failed to fetch equity data');
+    }
+    return data.data.equityData;
   },
 
-  getTrades: async (): Promise<{
+  getUnderwaterData: async (mdAccountId: string): Promise<UnderwaterData[]> => {
+    const response = await fetch(`${API_BASE_URL}/${mdAccountId}`);
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error('Failed to fetch underwater data');
+    }
+    return data.data.underwaterData;
+  },
+
+  getTrades: async (mdAccountId: string): Promise<{
     previousTrades: Trade[];
     bestTrades: Trade[];
     worstTrades: Trade[];
   }> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          previousTrades: mockData.previousTrades.slice(0, 5),
-          bestTrades: mockData.bestTrades,
-          worstTrades: mockData.worstTrades
-        });
-      }, 500);
-    });
+    const response = await fetch(`${API_BASE_URL}/${mdAccountId}`);
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error('Failed to fetch trades');
+    }
+    return {
+      previousTrades: data.data.tradeHistory.previousTrades,
+      bestTrades: data.data.tradeHistory.bestTrades,
+      worstTrades: data.data.tradeHistory.worstTrades
+    };
   },
 };
