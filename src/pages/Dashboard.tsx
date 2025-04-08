@@ -54,7 +54,7 @@ export const Dashboard = () => {
     if (selectedAccount?.id) {
       fetchTeamUsers(selectedAccount?.id);
 
-      fetchDashboardData("10005992345");
+      fetchDashboardData(selectedAccount.login);
     }
   }, [selectedAccount?.id]);
 
