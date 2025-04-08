@@ -54,7 +54,7 @@ export const Dashboard = () => {
     if (selectedAccount?.id) {
       fetchTeamUsers(selectedAccount?.id);
 
-      fetchDashboardData(selectedAccount.id);
+      fetchDashboardData(selectedAccount.login);
     }
   }, [selectedAccount?.id]);
 
@@ -105,9 +105,9 @@ export const Dashboard = () => {
     }
   };
 
-  const fetchDashboardData = async (mdAccountId: string) => {
+  const fetchDashboardData = async (mt5Login: string) => {
     try {
-      const data = await dashboardService.getDashboardTradeData(mdAccountId);
+      const data = await dashboardService.getDashboardTradeData(mt5Login);
       const statsData = data.tradingMetrics;
       const equityDataResult = data.equityData;
       const underwaterDataResult = data.underwaterData;

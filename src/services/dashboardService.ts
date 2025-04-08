@@ -50,8 +50,8 @@ const API_BASE_URL = 'https://us-central1-fundezy-app.cloudfunctions.net/tradeDa
 // Mock API calls that return promises to simulate real API behavior
 export const dashboardService = {
 
-  getDashboardTradeData: async (mdAccountId: string): Promise<DashboardData> => {
-    const response = await fetch(`${API_BASE_URL}/${mdAccountId}`);
+  getDashboardTradeData: async (mt5Login: string): Promise<DashboardData> => {
+    const response = await fetch(`${API_BASE_URL}/${mt5Login}`);
     const data = await response.json();
     if (!data.success) {
       throw new Error('Failed to fetch dashboard data');
