@@ -54,7 +54,7 @@ export const Dashboard = () => {
     if (selectedAccount?.id) {
       fetchTeamUsers(selectedAccount?.id);
 
-      fetchDashboardData(selectedAccount.login);
+      fetchDashboardData("10005992345");
     }
   }, [selectedAccount?.id]);
 
@@ -282,8 +282,8 @@ export const Dashboard = () => {
                         <XAxis dataKey="date" />
                         <YAxis />
                         <Tooltip />
-                        <ReferenceLine y={11000} label="Passing" stroke="green" strokeDasharray="3 3" />
-                        <ReferenceLine y={9000} label="Failing" stroke="red" strokeDasharray="3 3" />
+                      { equityData[0]?.passingMark && <ReferenceLine y={equityData[0]?.passingMark} label="Passing" stroke="green" strokeDasharray="3 3" />}
+                      { equityData[0]?.failingMark && <ReferenceLine y={equityData[0]?.failingMark} label="Failing" stroke="red" strokeDasharray="3 3" />}
                         <Line type="monotone" dataKey="equity" stroke="#4285f4" strokeWidth={2} />
                       </LineChart>
                     </ResponsiveContainer>
