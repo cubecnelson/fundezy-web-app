@@ -15,7 +15,6 @@ import { dashboardService, type Stats, type EquityData, type UnderwaterData, typ
 import { MT5Credentials } from '../components/MT5Credentials';
 import { RankingsTable, type RankingType } from '../components/RankingsTable';
 import { PlusIcon } from '@heroicons/react/24/outline';
-import mockRankingsData from '../data/mockRankingsData.json';
 import TeamUserTable from '../components/TeamUserTable';
 import { Challenge, challengeService } from '../services/challengeService';
 import { useAnalytics } from '../hooks/useAnalytics';

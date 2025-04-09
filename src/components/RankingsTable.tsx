@@ -47,13 +47,14 @@ const getRankBadge = (rank: number) => {
   }
 };
 
-export const RankingsTable = ({ rankings, type, onTypeChange }: RankingsTableProps) => {
-  const [searchTerm, setSearchTerm] = useState('');
+export const RankingsTable = ({ rankings }: RankingsTableProps) => {
+  // const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const filteredRankings = rankings.filter(team =>
-    team.teamName.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredRankings = rankings.filter(() =>
+    // team.teamName.toLowerCase().includes(searchTerm.toLowerCase())
+    true
   );
 
   const totalPages = Math.ceil(filteredRankings.length / itemsPerPage);
