@@ -6,8 +6,7 @@ export type RankingType = 'daily' | 'cumulative' | 'event';
 export interface TeamRanking {
   rank: number;
   teamName: string;
-  netProfitAmount: number;
-  netProfitPercentage: number;
+  equityBalance: number;
   rankChange: number;
 }
 
@@ -69,7 +68,7 @@ export const RankingsTable = ({ rankings, type, onTypeChange }: RankingsTablePro
           <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
             Team Performance Rankings
           </h2>
-          <div className="flex items-center gap-4">
+          {/* <div className="flex items-center gap-4">
             <select
               value={type}
               onChange={(e) => onTypeChange(e.target.value as RankingType)}
@@ -86,7 +85,7 @@ export const RankingsTable = ({ rankings, type, onTypeChange }: RankingsTablePro
               onChange={(e) => setSearchTerm(e.target.value)}
               className="rounded-md border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-fundezy-red focus:border-fundezy-red"
             />
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -102,11 +101,11 @@ export const RankingsTable = ({ rankings, type, onTypeChange }: RankingsTablePro
                 Team Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                Net Profit
+                Equity Balance
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Net Profit %
-              </th>
+              </th> */}
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                 Rank Change
               </th>
@@ -130,16 +129,16 @@ export const RankingsTable = ({ rankings, type, onTypeChange }: RankingsTablePro
                   {team.teamName}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                  {formatCurrency(team.netProfitAmount)}
+                  {formatCurrency(team.equityBalance)}
                 </td>
-                <td className={`px-6 py-4 whitespace-nowrap text-sm ${
+                {/* <td className={`px-6 py-4 whitespace-nowrap text-sm ${
                   team.netProfitPercentage >= 0
                     ? 'text-green-600 dark:text-green-400'
                     : 'text-red-600 dark:text-red-400'
                 }`}>
                   {team.netProfitPercentage >= 0 ? '+' : ''}
                   {team.netProfitPercentage.toFixed(1)}%
-                </td>
+                </td> */}
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                   <div className="flex items-center">
                     {getRankChangeIcon(team.rankChange)}

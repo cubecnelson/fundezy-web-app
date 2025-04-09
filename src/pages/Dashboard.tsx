@@ -19,6 +19,7 @@ import mockRankingsData from '../data/mockRankingsData.json';
 import TeamUserTable from '../components/TeamUserTable';
 import { Challenge, challengeService } from '../services/challengeService';
 import { useAnalytics } from '../hooks/useAnalytics';
+import { getRankings, type Ranking } from '../services/rankingService';
 
 export const Dashboard = () => {
   const { user } = useAuth();
@@ -36,12 +37,14 @@ export const Dashboard = () => {
   const [rankingType, setRankingType] = useState<RankingType>('daily');
   const [teamUsers, setTeamUsers] = useState<DemoAccount[]>([]);
   const [challenges, setChallenges] = useState<Challenge[]>([]);
+  const [rankings, setRankings] = useState<Ranking[]>([]);
 
   useAnalytics('Dashboard');
 
   useEffect(() => {
     if (user?.email) {
       fetchUserAccounts();
+      fetchRankings();
     }
   }, [user?.email]);
 
@@ -135,6 +138,16 @@ export const Dashboard = () => {
     setShowCreateAccount(false);
   };
 
+  const fetchRankings = async () => {
+    try {
+      const rankingsData = await getRankings();
+      setRankings(rankingsData);
+    } catch (error) {
+      console.error('Error fetching rankings:', error);
+      setError('Failed to fetch rankings');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
@@ -152,6 +165,8 @@ export const Dashboard = () => {
 
   const activeAccounts = mt5Accounts.filter(account => account.status === 'active');
   const showDemoAccountSection = activeAccounts.length < 3;
+
+
 
   const selectedAccountIsEducation = selectedAccount?.challengeId && challenges.find(c => c.id === selectedAccount.challengeId)?.isEducation;
   const selectedAccountDisplayDashboard = selectedAccount?.challengeId && challenges.find(c => c.id === selectedAccount.challengeId)?.displayDashboard;
@@ -242,14 +257,19 @@ export const Dashboard = () => {
         )}
 
         {/* Rankings Table */}
-        {selectedAccountDisplayDashboard && selectedAccountIsEducation && (
+        {selectedAccountIsEducation && selectedAccountDisplayDashboard && (
           <div className="mb-8">
             <RankingsTable
-              rankings={mockRankingsData[rankingType]}
+              rankings={rankings.sort((a, b) => a.rank - b.rank).map(ranking => ({
+                rank: ranking.rank,
+                teamName: `${ranking.teamName} (${ranking.mt5Login})`,
+                equityBalance: ranking.equityBalance,
+                rankChange: ranking.rankChange
+              }))}
               type={rankingType}
-                onTypeChange={setRankingType}
-              />
-            </div>
+              onTypeChange={setRankingType}
+            />
+          </div>
         )}
 
         {/* Selected Account Dashboard */}
