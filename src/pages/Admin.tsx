@@ -8,6 +8,7 @@ import { CreateDemoAccount } from '../components/admin/CreateDemoAccount';
 import { MT5AccountsList } from '../components/admin/MT5AccountsList';
 import { AccountLinking } from '../components/admin/AccountLinking';
 import { useAnalytics } from '../hooks/useAnalytics';
+import DashboardDataUpload from './DashboardDataUpload';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -112,6 +113,19 @@ export default function Admin() {
           >
             Account Linking
           </Tab>
+          <Tab
+            className={({ selected }) =>
+              classNames(
+                'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
+                'ring-white/60 ring-offset-2 ring-offset-fundezy-red focus:outline-none focus:ring-2',
+                selected
+                  ? 'bg-white dark:bg-gray-700 text-fundezy-red shadow'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-white/[0.12] hover:text-fundezy-red'
+              )
+            }
+          >
+            Dashboard Data Upload
+          </Tab>
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel>
@@ -125,6 +139,9 @@ export default function Admin() {
           </Tab.Panel>
           <Tab.Panel>
             <AccountLinking />
+          </Tab.Panel>
+          <Tab.Panel>
+            <DashboardDataUpload />
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>

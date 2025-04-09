@@ -102,4 +102,22 @@ export const dashboardService = {
       worstTrades: data.data.tradeHistory.worstTrades
     };
   },
+
+  uploadTradeDataDoc: async (mt5Login: string, jsonData: any): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/upload`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        mt5Login,
+        data: jsonData
+      })
+    });
+
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error(data.message || 'Failed to upload trade data');
+    }
+  },
 };
