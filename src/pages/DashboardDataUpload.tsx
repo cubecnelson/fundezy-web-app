@@ -8,7 +8,7 @@ import { adminService } from '../services/adminService';
 export const DashboardDataUpload = () => {
   const { user } = useAuth();
   const [jsonData, setJsonData] = useState('');
-  const [mt5Login, setMt5Login] = useState('');
+//   const [mt5Login, setMt5Login] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -64,7 +64,7 @@ export const DashboardDataUpload = () => {
       
       setSuccess('Data uploaded successfully!');
       setJsonData('');
-      setMt5Login('');
+    //   setMt5Login('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid JSON format. Please check your input.');
       setSuccess(null);
