@@ -32,7 +32,7 @@ export const Navbar = () => {
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-4" aria-label="Global">
         <div className="flex lg:flex-1">
           <a href="/" className="flex items-center space-x-2">
-            <Logo />
+            <Logo /> {process.env.NODE_ENV === 'production' ? undefined : 'UAT'}
           </a>
         </div>
         <div className="flex items-center gap-4">

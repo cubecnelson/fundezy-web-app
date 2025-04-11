@@ -22,7 +22,7 @@ const firebaseConfigUat = {
   appId: "1:228840903244:web:c0da2dd5efa19d0edddae9"
 };
 
-export const app = initializeApp(firebaseConfigUat);
+export const app = initializeApp(process.env.NODE_ENV === 'production' ? firebaseConfig : firebaseConfigUat);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const analytics = getAnalytics(app);
