@@ -13,7 +13,16 @@ const firebaseConfig = {
   measurementId: "G-561CSLCPK1"
 };
 
-export const app = initializeApp(firebaseConfig);
+const firebaseConfigUat = {
+  apiKey: "AIzaSyB8sIWgWE1bolIz-xfOFrm7KBbIebUFJaQ",
+  authDomain: "fundezy-app-uat.firebaseapp.com",
+  projectId: "fundezy-app-uat",
+  storageBucket: "fundezy-app-uat.firebasestorage.app",
+  messagingSenderId: "228840903244",
+  appId: "1:228840903244:web:c0da2dd5efa19d0edddae9"
+};
+
+export const app = initializeApp(firebaseConfigUat);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const analytics = getAnalytics(app);
