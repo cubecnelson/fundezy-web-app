@@ -175,10 +175,10 @@ export const Dashboard = () => {
       <div className="mx-auto max-w-7xl px-4 py-8">
         {/* Get Demo Account Section - Only show if less than 3 active accounts */}
         {showDemoAccountSection && (
-          <div className="mb-8 bg-gray-50 dark:bg-gray-800 rounded-lg p-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 ">
               {/* Demo Account Button */}
-              <div className="text-center">
+              <div className="text-center dark:bg-gray-800 mb-8 bg-gray-50 rounded-lg p-12">
                 <button
                   onClick={handleCreateAccount}
                   className="inline-flex items-center justify-center p-4 rounded-full bg-fundezy-red text-white hover:bg-red-600 transition-colors"
@@ -192,9 +192,8 @@ export const Dashboard = () => {
                   Start trading with virtual funds and prove your skills
                 </p>
               </div>
-
               {/* Telegram Channel Section */}
-              <div className="text-center">
+              <div className="text-center dark:bg-gray-800 mb-8 bg-gray-50 rounded-lg p-12">
                 <img src="https://placehold.co/50x50" alt="Telegram" className="mx-auto" />
                 <h2 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">
                   Join Our Telegram Channel
