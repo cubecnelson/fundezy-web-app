@@ -11,11 +11,46 @@ import SignIn from './pages/SignIn';
 import InvestorRelations from './pages/InvestorRelations';
 import Admin from './pages/Admin';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { adminService } from './services/adminService';
 
-const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
+const PrivateRoute = ({ children, isAdmin = false }: { children: React.ReactNode, isAdmin?: boolean }) => {
   const { user, loading } = useAuth();
+  const [isUserAdmin, setIsUserAdmin] = useState(false);
+  const [checkingAdmin, setCheckingAdmin] = useState(isAdmin);
+  const navigate = useNavigate();
 
-  if (loading) {
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      if (!isAdmin) {
+        setCheckingAdmin(false);
+        return;
+      }
+
+      if (!user?.email) {
+        navigate('/');
+        return;
+      }
+
+      try {
+        const adminStatus = await adminService.checkIsAdmin(user.email);
+        setIsUserAdmin(adminStatus);
+        if (!adminStatus) {
+          navigate('/');
+        }
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+        navigate('/');
+      } finally {
+        setCheckingAdmin(false);
+      }
+    };
+
+    checkAdminStatus();
+  }, [user, isAdmin, navigate]);
+
+  if (loading || checkingAdmin) {
     return <div>Loading...</div>;
   }
 
@@ -23,8 +58,13 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/signin" />;
   }
 
+  if (isAdmin && !isUserAdmin) {
+    return null;
+  }
+
   return <>{children}</>;
 };
+
 
 export default function App() {
   return (
@@ -46,7 +86,11 @@ export default function App() {
               />
               <Route path="/challenge" element={<Challenge />} />
               <Route path="/about" element={<About />} />
-              <Route path="/investor-relations" element={<InvestorRelations />} />
+              <Route path="/investor-relations" element={
+                <PrivateRoute isAdmin={true}>
+                  <InvestorRelations />
+                </PrivateRoute>
+              } />
               <Route path="/how-it-works" element={<HowItWorks />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/admin" element={<Admin />} />

@@ -4,7 +4,7 @@ export const Footer = () => {
       <div className="mx-auto max-w-7xl overflow-hidden px-6 py-8">
         <nav className="flex flex-wrap justify-center space-x-6" aria-label="Footer">
           <a href="/about" className="text-sm text-gray-400 hover:text-fundezy-red">About</a>
-          <a href="/investor-relations" className="text-sm text-gray-400 hover:text-fundezy-red">Investor Relations</a>
+          {/* <a href="/investor-relations" className="text-sm text-gray-400 hover:text-fundezy-red">Investor Relations</a> */}
           <a href="/how-it-works" className="text-sm text-gray-400 hover:text-fundezy-red">How It Works</a>
           <a href="/pricing" className="text-sm text-gray-400 hover:text-fundezy-red">Pricing</a>
         </nav>
