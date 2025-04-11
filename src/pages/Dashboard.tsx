@@ -176,19 +176,41 @@ export const Dashboard = () => {
         {/* Get Demo Account Section - Only show if less than 3 active accounts */}
         {showDemoAccountSection && (
           <div className="mb-8 bg-gray-50 dark:bg-gray-800 rounded-lg p-12">
-            <div className="text-center">
-              <button
-                onClick={handleCreateAccount}
-                className="inline-flex items-center justify-center p-4 rounded-full bg-fundezy-red text-white hover:bg-red-600 transition-colors"
-              >
-                <PlusIcon className="h-8 w-8" />
-              </button>
-              <h2 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">
-                Get a Free Demo Account
-              </h2>
-              <p className="mt-2 text-gray-600 dark:text-gray-300">
-                Start trading with virtual funds and prove your skills
-              </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Demo Account Button */}
+              <div className="text-center">
+                <button
+                  onClick={handleCreateAccount}
+                  className="inline-flex items-center justify-center p-4 rounded-full bg-fundezy-red text-white hover:bg-red-600 transition-colors"
+                >
+                  <PlusIcon className="h-8 w-8" />
+                </button>
+                <h2 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">
+                  Get a Free Demo Account
+                </h2>
+                <p className="mt-2 text-gray-600 dark:text-gray-300">
+                  Start trading with virtual funds and prove your skills
+                </p>
+              </div>
+
+              {/* Telegram Channel Section */}
+              <div className="text-center">
+                <img src="https://placehold.co/50x50" alt="Telegram" className="mx-auto" />
+                <h2 className="mt-4 text-xl font-semibold text-gray-900 dark:text-white">
+                  Join Our Telegram Channel
+                </h2>
+                <p className="mt-2 text-gray-600 dark:text-gray-300">
+                  Stay updated with the latest trading tips, news, and community discussions.
+                </p>
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-block px-6 py-3 bg-[#0088cc] hover:bg-[#0077b3] text-white rounded-md transition-colors"
+                >
+                  Join Now
+                </a>
+              </div>
             </div>
           </div>
         )}
