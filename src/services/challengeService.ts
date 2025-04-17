@@ -1,3 +1,5 @@
+import { getApiUrl } from '../config/env.config';
+
 interface Timestamp {
   _seconds: number;
   _nanoseconds: number;
@@ -12,7 +14,7 @@ export interface Challenge {
   name: string;
 }
 
-const API_BASE_URL = 'https://us-central1-fundezy-app.cloudfunctions.net/api';
+const API_BASE_URL = getApiUrl('CHALLENGES');
 
 export const challengeService = {
   async getAllChallenges(): Promise<Challenge[]> {

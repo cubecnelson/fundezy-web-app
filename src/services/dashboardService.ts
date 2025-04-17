@@ -1,5 +1,7 @@
 // import mockData from '../data/mockDashboardData.json';
 
+import { getApiUrl } from '../config/env.config';
+
 export interface Stats {
   rank: number;
   totalTraders: number;
@@ -45,7 +47,7 @@ export interface DashboardData {
   };
 }
 
-const API_BASE_URL = 'https://us-central1-fundezy-app.cloudfunctions.net/tradeData';
+const API_BASE_URL = getApiUrl('TRADE_DATA');
 
 // Mock API calls that return promises to simulate real API behavior
 export const dashboardService = {

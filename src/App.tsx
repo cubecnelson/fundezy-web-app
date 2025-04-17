@@ -14,6 +14,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminService } from './services/adminService';
+import Checkout from './pages/Checkout';
 
 const PrivateRoute = ({ children, isAdmin = false }: { children: React.ReactNode, isAdmin?: boolean }) => {
   const { user, loading } = useAuth();
@@ -91,8 +92,16 @@ export default function App() {
                   <InvestorRelations />
                 </PrivateRoute>
               } />
+              <Route
+                path="/checkout/:tier"
+                element={
+                  <PrivateRoute>
+                    <Checkout />
+                  </PrivateRoute>
+                }
+              />
               <Route path="/how-it-works" element={<HowItWorks />} />
-              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/pricing" element={<Challenge />} />
               <Route path="/admin" element={<Admin />} />
             </Routes>
           </main>

@@ -3,12 +3,11 @@ import { CheckIcon } from '@heroicons/react/24/outline';
 import { WaitingListModal } from '../components/WaitingListModal';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useAnalytics } from '../hooks/useAnalytics';
 
 const tiers = [
   {
     name: 'Standard',
-    id: 'tier-standard',
+    id: 'standard',
     price: '299',
     description: 'Perfect for new traders starting their journey.',
     features: [
@@ -20,10 +19,11 @@ const tiers = [
       'Real-time tracking',
     ],
     featured: false,
+    isAvailable: true,
   },
   {
     name: 'Professional',
-    id: 'tier-professional',
+    id: 'professional',
     price: '599',
     description: 'For experienced traders ready to scale.',
     features: [
@@ -35,10 +35,11 @@ const tiers = [
       'Priority support',
     ],
     featured: true,
+    isAvailable: true,
   },
   {
     name: 'Enterprise',
-    id: 'tier-enterprise',
+    id: 'enterprise',
     price: '999',
     description: 'For professional traders seeking maximum opportunity.',
     features: [
@@ -50,6 +51,7 @@ const tiers = [
       'VIP support',
     ],
     featured: false,
+    isAvailable: true,
   },
 ];
 
@@ -61,13 +63,20 @@ export default function Challenge() {
   const [isWaitingListOpen, setIsWaitingListOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuth();
-  useAnalytics('Challenge');
 
   const handleDemoSignUp = () => {
     if (user) {
       navigate('/dashboard');
     } else {
       navigate('/signin');
+    }
+  };
+
+  const handleSelectChallenge = (tierId: string) => {
+    if (user) {
+      navigate(`/checkout/${tierId}`);
+    } else {
+      navigate('/signin', { state: { redirectTo: `/checkout/${tierId}` } });
     }
   };
 
@@ -118,7 +127,7 @@ export default function Challenge() {
           </div>
         </div>
 
-        {/* Existing Pricing Tiers */}
+        {/* Challenge Tiers */}
         <div className="isolate mx-auto grid max-w-md grid-cols-1 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-8">
           {tiers.map((tier) => (
             <div
@@ -152,6 +161,19 @@ export default function Challenge() {
                   </li>
                 ))}
               </ul>
+              {tier.isAvailable ? (
+              <button
+                onClick={() => handleSelectChallenge(tier.id)}
+                className={classNames(
+                  tier.featured
+                    ? 'bg-fundezy-red text-white shadow-sm hover:bg-red-600'
+                    : 'text-fundezy-red ring-1 ring-inset ring-fundezy-red hover:ring-red-600 dark:ring-red-500 dark:hover:ring-red-400',
+                  'mt-8 block w-full rounded-md py-2 px-3 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fundezy-red'
+                )}
+              >
+                Get Started
+              </button>
+              ) : (
               <button
                 onClick={() => setIsWaitingListOpen(true)}
                 className={classNames(
@@ -161,8 +183,9 @@ export default function Challenge() {
                   'mt-8 block w-full rounded-md py-2 px-3 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fundezy-red'
                 )}
               >
-                Join Waiting List
-              </button>
+                  Join Waiting List
+                </button>
+              )}
             </div>
           ))}
         </div>

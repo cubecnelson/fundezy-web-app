@@ -19,9 +19,13 @@ import TeamUserTable from '../components/TeamUserTable';
 import { Challenge, challengeService } from '../services/challengeService';
 import { useAnalytics } from '../hooks/useAnalytics';
 import { getRankings, type Ranking } from '../services/rankingService';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { CheckCircleIcon } from '@heroicons/react/24/solid';
 
 export const Dashboard = () => {
   const { user } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mt5Accounts, setMT5Accounts] = useState<MT5Account[]>([]);
@@ -37,8 +41,23 @@ export const Dashboard = () => {
   const [teamUsers, setTeamUsers] = useState<DemoAccount[]>([]);
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [rankings, setRankings] = useState<Ranking[]>([]);
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
 
   useAnalytics('Dashboard');
+
+  useEffect(() => {
+    // Check for payment success state
+    if (location.state?.paymentSuccess) {
+      setShowPaymentSuccess(true);
+      // Clear the state to prevent showing the message again on refresh
+      navigate(location.pathname, { replace: true });
+      // Hide the success message after 5 seconds
+      const timer = setTimeout(() => {
+        setShowPaymentSuccess(false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [location.state, navigate]);
 
   useEffect(() => {
     if (user?.email) {
@@ -173,6 +192,14 @@ export const Dashboard = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <div className="mx-auto max-w-7xl px-4 py-8">
+        {/* Payment Success Message */}
+        {showPaymentSuccess && (
+          <div className="mb-8 p-4 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 rounded-lg flex items-center">
+            <CheckCircleIcon className="h-6 w-6 mr-2" />
+            <span>Payment successful! Your trading account will be activated shortly.</span>
+          </div>
+        )}
+
         {/* Get Demo Account Section - Only show if less than 3 active accounts */}
         {showDemoAccountSection && (
           <div className="">

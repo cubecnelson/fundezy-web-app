@@ -1,3 +1,5 @@
+import { getApiUrl } from '../config/env.config';
+
 export interface MT5Account {
   challengeId: string | undefined;
   id: string;
@@ -43,7 +45,7 @@ export const fetchDemoAccountAssignedTo = async (mt5AccountId: string): Promise<
   }
 
   try {
-    const response = await fetch('https://us-central1-fundezy-app.cloudfunctions.net/demoAccounts');
+    const response = await fetch(getApiUrl('DEMO_ACCOUNTS'));
     if (!response.ok) {
       throw new Error(`Failed to fetch demo accounts: ${response.statusText}`);
     }
@@ -61,7 +63,7 @@ export const fetchMT5AccountById = async (id: string): Promise<MT5Account> => {
   }
 
   try {
-    const response = await fetch(`https://mt5accounts-6wrzc5r7aq-uc.a.run.app/${id}`);
+    const response = await fetch(`${getApiUrl('MT5_ACCOUNTS')}/${id}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch MT5 account: ${response.statusText}`);
     }
@@ -83,7 +85,7 @@ export const fetchDemoAccountByEmail = async (email: string): Promise<DemoAccoun
   }
 
   try {
-    const response = await fetch('https://us-central1-fundezy-app.cloudfunctions.net/demoAccounts');
+    const response = await fetch(getApiUrl('DEMO_ACCOUNTS'));
     if (!response.ok) {
       throw new Error(`Failed to fetch demo accounts: ${response.statusText}`);
     }
@@ -103,7 +105,7 @@ export const fetchMT5Account = async (email: string): Promise<MT5Account[]> => {
   }
 
   try {
-    const response = await fetch(`https://mt5accounts-6wrzc5r7aq-uc.a.run.app/email/${email}`);
+    const response = await fetch(`${getApiUrl('MT5_ACCOUNTS')}/email/${email}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch MT5 account: ${response.statusText}`);
     }
@@ -117,7 +119,7 @@ export const fetchMT5Account = async (email: string): Promise<MT5Account[]> => {
 
 const logAccountRemoval = async (auditData: AuditLog): Promise<void> => {
   try {
-    const response = await fetch('https://us-central1-fundezy-app.cloudfunctions.net/audit_logs', {
+    const response = await fetch(getApiUrl('AUDIT_LOGS'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -150,7 +152,7 @@ export const clearMT5Account = async (account: MT5Account): Promise<void> => {
     });
 
     // Clear the MT5 account credentials
-    const response = await fetch(`https://mt5accounts-6wrzc5r7aq-uc.a.run.app/${account.id}`, {
+    const response = await fetch(`${getApiUrl('MT5_ACCOUNTS')}/${account.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -183,7 +185,7 @@ export const createDemoAccount = async (email: string): Promise<{ success: boole
 
   try {
     // 1. Get available demo account
-    const availableResponse = await fetch('https://us-central1-fundezy-app.cloudfunctions.net/demoAccounts/available');
+    const availableResponse = await fetch(getApiUrl('DEMO_ACCOUNTS') + '/available');
     
     // Check if response is empty (no content)
     if (availableResponse.status === 204) {
@@ -224,7 +226,7 @@ export const createDemoAccount = async (email: string): Promise<{ success: boole
     }
 
     // 2. Create MT5 account
-    const createResponse = await fetch('https://mt5accounts-6wrzc5r7aq-uc.a.run.app/', {
+    const createResponse = await fetch(getApiUrl('MT5_ACCOUNTS'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -246,7 +248,7 @@ export const createDemoAccount = async (email: string): Promise<{ success: boole
 
     // 3. Assign demo account
     const assignResponse = await fetch(
-      `https://us-central1-fundezy-app.cloudfunctions.net/demoAccounts/assign/${demoAccount.id}`,
+      `${getApiUrl('DEMO_ACCOUNTS')}/assign/${demoAccount.id}`,
       {
         method: 'POST',
         headers: {

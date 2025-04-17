@@ -1,3 +1,5 @@
+import { getApiUrl } from '../config/env.config';
+
 // Types
 export interface DemoAccount {
   id?: string;
@@ -34,11 +36,11 @@ export interface MT5Account {
   };
 }
 
-const BASE_URL = 'https://us-central1-fundezy-app.cloudfunctions.net/demoAccounts';
+const BASE_URL = getApiUrl('DEMO_ACCOUNTS');
 const MT5_URL = 'https://mt5accounts-6wrzc5r7aq-uc.a.run.app';
-const AUDIT_URL = 'https://us-central1-fundezy-app.cloudfunctions.net/audit_logs';
-const ADMIN_CHECK_URL = 'https://us-central1-fundezy-app.cloudfunctions.net/api/checkAdmin';
-const USERS_URL = 'https://us-central1-fundezy-app.cloudfunctions.net/api/users';
+const AUDIT_URL = getApiUrl('AUDIT_LOGS');
+const ADMIN_CHECK_URL = getApiUrl('ADMIN_CHECK');
+const USERS_URL = getApiUrl('USERS');
 
 export const adminService = {
   checkIsAdmin: async (email: string): Promise<boolean> => {

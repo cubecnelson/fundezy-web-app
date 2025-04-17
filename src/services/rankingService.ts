@@ -1,3 +1,5 @@
+import { getApiUrl } from '../config/env.config';
+
 export interface Ranking {
   rank: number;
   teamName: string;
@@ -10,7 +12,7 @@ export interface Ranking {
 
 export const getRankings = async (): Promise<Ranking[]> => {
   try {
-    const response = await fetch('https://us-central1-fundezy-app.cloudfunctions.net/rankings');
+    const response = await fetch(getApiUrl('RANKINGS'));
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
