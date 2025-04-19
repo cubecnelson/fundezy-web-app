@@ -6,7 +6,6 @@ import { Dashboard } from './pages/Dashboard';
 import Challenge from './pages/Challenge';
 import About from './pages/About';
 import { HowItWorks } from './pages/HowItWorks';
-import Pricing from './pages/Pricing';
 import SignIn from './pages/SignIn';
 import InvestorRelations from './pages/InvestorRelations';
 import Admin from './pages/Admin';

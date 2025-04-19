@@ -50,7 +50,7 @@ const challengeTiers: Record<string, CheckoutItem> = {
 
 const stripePromise = loadStripe('pk_test_51RDnSuQfvuwXfMVkZrlkrArQlhvciM67pQ1LvLiFDeBL9OabgPeMCZaXXoI4iLPn6grdlI9mq4YlX5skMeruwcI600s9QPWrZG');
 
-function PaymentForm({ clientSecret, selectedTier }: { clientSecret: string; selectedTier: CheckoutItem }) {
+function PaymentForm({ selectedTier }: { clientSecret: string; selectedTier: CheckoutItem }) {
   const stripe = useStripe();
   const elements = useElements();
   const [error, setError] = useState<string | null>(null);
