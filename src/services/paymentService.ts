@@ -18,6 +18,7 @@ export const initializePayment = async (userId: string, userEmail: string, tierI
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+            userEmail,
             userId,
             tierId,
             tier,
