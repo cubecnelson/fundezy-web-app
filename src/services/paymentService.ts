@@ -3,11 +3,12 @@ import { getApiUrl } from '../config/env.config';
 
 const PAYMENT_URL = getApiUrl('PAYMENTS');
 
-export const initializePayment = async (userId: string, tierId: string, tier: CheckoutItem) => {
+export const initializePayment = async (userId: string, userEmail: string, tierId: string, tier: CheckoutItem) => {
     console.log('initializePayment', JSON.stringify({
             userId,
             tierId,
             tier,
+            userEmail,
         }));
   try {
     const response = await fetch(`${PAYMENT_URL}/create-payment-intent`, {

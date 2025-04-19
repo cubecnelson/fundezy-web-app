@@ -126,6 +126,7 @@ export default function Checkout() {
       try {
         const clientSecret = await initializePayment(
           user?.uid || 'user123',
+          user?.email || 'user@example.com',
           tier || 'standard_challenge_1',
           selectedTier
         );

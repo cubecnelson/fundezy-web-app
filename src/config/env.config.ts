@@ -3,7 +3,6 @@ export const isUat = true;
 export const API_CONFIG = {
   BASE_URL: 'https://us-central1-fundezy-app.cloudfunctions.net',
   UAT_BASE_URL: 'https://us-central1-fundezy-app-uat.cloudfunctions.net',
-  MT5_BASE_URL: 'https://mt5accounts-6wrzc5r7aq-uc.a.run.app',
   ENDPOINTS: {
     TRADE_DATA: '/tradeData',
     DEMO_ACCOUNTS: '/demoAccounts',
@@ -13,14 +12,12 @@ export const API_CONFIG = {
     RANKINGS: '/rankings',
     PAYMENTS: '/payments',
     CHALLENGES: '/api',
-    MT5_ACCOUNTS: '',
+    MT5_ACCOUNTS: '/mt5Accounts',
   },
 } as const;
 
 export const getApiUrl = (endpoint: keyof typeof API_CONFIG.ENDPOINTS): string => {
-  const baseUrl = endpoint === 'MT5_ACCOUNTS' 
-    ? API_CONFIG.MT5_BASE_URL 
-    : isUat 
+  const baseUrl = isUat 
       ? API_CONFIG.UAT_BASE_URL 
       : API_CONFIG.BASE_URL;
   return `${baseUrl}${API_CONFIG.ENDPOINTS[endpoint]}`;
