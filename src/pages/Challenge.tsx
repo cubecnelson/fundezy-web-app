@@ -10,7 +10,7 @@ const tiers = [
     name: 'Standard',
     id: 'standard',
     price: '299',
-    description: 'Perfect for new traders starting their journey.',
+    description: 'Ideal for new traders beginning their journey.',
     features: [
       '$10,000 funded account',
       '10% profit target',
@@ -26,7 +26,7 @@ const tiers = [
     name: 'Professional',
     id: 'professional',
     price: '599',
-    description: 'For experienced traders ready to scale.',
+    description: 'For skilled traders looking to grow further.',
     features: [
       '$80,000 funded account',
       '10% profit target',
@@ -42,7 +42,7 @@ const tiers = [
     name: 'Enterprise',
     id: 'enterprise',
     price: '999',
-    description: 'For professional traders seeking maximum opportunity.',
+    description: 'For advanced traders pursuing greater potential.',
     features: [
       '$200,000 funded account',
       '10% profit target',
