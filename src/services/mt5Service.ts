@@ -1,6 +1,7 @@
 import { getApiUrl } from '../config/env.config';
 
 export interface MT5Account {
+  demoAccountId: string | undefined;
   challengeId: string | undefined;
   id: string;
   server: string;

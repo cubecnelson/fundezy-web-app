@@ -182,7 +182,8 @@ export const Dashboard = () => {
   ] : [];
 
   const activeAccounts = mt5Accounts.filter(account => account.status === 'active');
-  const showDemoAccountSection = activeAccounts.length < 3;
+  const demoAccounts = activeAccounts.filter(account => account.demoAccountId !== undefined);
+  const showDemoAccountSection = demoAccounts.length < 2 || (demoAccounts.length < 3 && activeAccounts.some(account => account.challengeId !== undefined));
 
 
 

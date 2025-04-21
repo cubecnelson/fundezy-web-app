@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { WaitingListModal } from '../components/WaitingListModal';
+import { TermsAcceptanceFlow } from '../components/TermsAcceptanceFlow';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -61,6 +62,8 @@ function classNames(...classes: string[]) {
 
 export default function Challenge() {
   const [isWaitingListOpen, setIsWaitingListOpen] = useState(false);
+  const [isTermsFlowOpen, setIsTermsFlowOpen] = useState(false);
+  const [selectedTierId, setSelectedTierId] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -73,10 +76,16 @@ export default function Challenge() {
   };
 
   const handleSelectChallenge = (tierId: string) => {
+    setSelectedTierId(tierId);
+    setIsTermsFlowOpen(true);
+  };
+
+  const handleTermsComplete = () => {
+    setIsTermsFlowOpen(false);
     if (user) {
-      navigate(`/checkout/${tierId}`);
+      navigate(`/checkout/${selectedTierId}`);
     } else {
-      navigate('/signin', { state: { redirectTo: `/checkout/${tierId}` } });
+      navigate('/signin', { state: { redirectTo: `/checkout/${selectedTierId}` } });
     }
   };
 
@@ -194,6 +203,12 @@ export default function Challenge() {
       <WaitingListModal
         isOpen={isWaitingListOpen}
         onClose={() => setIsWaitingListOpen(false)}
+      />
+
+      <TermsAcceptanceFlow
+        isOpen={isTermsFlowOpen}
+        onClose={() => setIsTermsFlowOpen(false)}
+        onComplete={handleTermsComplete}
       />
     </div>
   );

@@ -55,7 +55,41 @@ function PaymentForm({ selectedTier }: { clientSecret: string; selectedTier: Che
   const elements = useElements();
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [discountApplied, setDiscountApplied] = useState(false);
+  const [discountAmount, setDiscountAmount] = useState(0);
   const navigate = useNavigate();
+
+  const handleCouponSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!stripe) return;
+
+    try {
+      const response = await fetch('/api/validate-coupon', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ couponCode }),
+      });
+
+      const data = await response.json();
+
+      if (data.valid) {
+        setDiscountAmount(data.discountAmount);
+        setDiscountApplied(true);
+        setError(null);
+      } else {
+        setError('Invalid coupon code');
+        setDiscountApplied(false);
+        setDiscountAmount(0);
+      }
+    } catch (err) {
+      setError('Failed to validate coupon');
+      setDiscountApplied(false);
+      setDiscountAmount(0);
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -83,8 +117,34 @@ function PaymentForm({ selectedTier }: { clientSecret: string; selectedTier: Che
     }
   };
 
+  const finalPrice = selectedTier.price - discountAmount;
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-4">
+        <form onSubmit={handleCouponSubmit} className="flex gap-2">
+          <input
+            type="text"
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value)}
+            placeholder="Enter coupon code"
+            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-fundezy-red focus:border-transparent dark:bg-gray-700 dark:text-white"
+          />
+          <button
+            type="submit"
+            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          >
+            Apply
+          </button>
+        </form>
+
+        {discountApplied && (
+          <div className="p-3 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-md">
+            Coupon applied! ${discountAmount} discount
+          </div>
+        )}
+      </div>
+
       <PaymentElement />
       
       {error && (
@@ -98,7 +158,7 @@ function PaymentForm({ selectedTier }: { clientSecret: string; selectedTier: Che
         disabled={!stripe || processing}
         className="w-full bg-fundezy-red text-white py-3 px-4 rounded-md hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {processing ? 'Processing...' : `Pay $${selectedTier.price}`}
+        {processing ? 'Processing...' : `Pay $${finalPrice}`}
       </button>
     </form>
   );
