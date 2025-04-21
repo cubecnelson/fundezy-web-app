@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { CheckIcon } from '@heroicons/react/24/outline';
 
 interface TermsAcceptanceFlowProps {
   isOpen: boolean;
