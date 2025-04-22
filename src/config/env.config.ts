@@ -13,6 +13,7 @@ export const API_CONFIG = {
     PAYMENTS: '/payments',
     CHALLENGES: '/api',
     MT5_ACCOUNTS: '/mt5Accounts',
+    TIERS: '/tiers',
   },
 } as const;
 

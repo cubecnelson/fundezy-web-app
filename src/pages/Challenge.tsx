@@ -1,60 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { WaitingListModal } from '../components/WaitingListModal';
 import { TermsAcceptanceFlow } from '../components/TermsAcceptanceFlow';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-
-const tiers = [
-  {
-    name: 'Standard',
-    id: 'standard',
-    price: '299',
-    description: 'Ideal for new traders beginning their journey.',
-    features: [
-      '$10,000 funded account',
-      '10% profit target',
-      'Maximum 5% daily drawdown',
-      'Maximum 10% total drawdown',
-      '30-day trading period',
-      'Real-time tracking',
-    ],
-    featured: false,
-    isAvailable: true,
-  },
-  {
-    name: 'Professional',
-    id: 'professional',
-    price: '599',
-    description: 'For skilled traders looking to grow further.',
-    features: [
-      '$80,000 funded account',
-      '10% profit target',
-      'Maximum 5% daily drawdown',
-      'Maximum 10% total drawdown',
-      '30-day trading period',
-      'Priority support',
-    ],
-    featured: true,
-    isAvailable: true,
-  },
-  {
-    name: 'Enterprise',
-    id: 'enterprise',
-    price: '999',
-    description: 'For advanced traders pursuing greater potential.',
-    features: [
-      '$200,000 funded account',
-      '10% profit target',
-      'Maximum 5% daily drawdown',
-      'Maximum 10% total drawdown',
-      '30-day trading period',
-      'VIP support',
-    ],
-    featured: false,
-    isAvailable: true,
-  },
-];
+import { tierService, Tier } from '../services/tierService';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
@@ -64,8 +14,27 @@ export default function Challenge() {
   const [isWaitingListOpen, setIsWaitingListOpen] = useState(false);
   const [isTermsFlowOpen, setIsTermsFlowOpen] = useState(false);
   const [selectedTierId, setSelectedTierId] = useState<string | null>(null);
+  const [tiers, setTiers] = useState<Tier[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  useEffect(() => {
+    const fetchTiers = async () => {
+      try {
+        const data = await tierService.getAllTiers();
+        setTiers(data);
+      } catch (err) {
+        setError('Failed to load tiers. Please try again later.');
+        console.error('Error fetching tiers:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTiers();
+  }, []);
 
   const handleDemoSignUp = () => {
     if (user) {
@@ -88,6 +57,22 @@ export default function Challenge() {
       navigate('/signin', { state: { redirectTo: `/checkout/${selectedTierId}` } });
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-fundezy-red"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-red-500">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="py-24 sm:py-32">
@@ -171,27 +156,27 @@ export default function Challenge() {
                 ))}
               </ul>
               {tier.isAvailable ? (
-              <button
-                onClick={() => handleSelectChallenge(tier.id)}
-                className={classNames(
-                  tier.featured
-                    ? 'bg-fundezy-red text-white shadow-sm hover:bg-red-600'
-                    : 'text-fundezy-red ring-1 ring-inset ring-fundezy-red hover:ring-red-600 dark:ring-red-500 dark:hover:ring-red-400',
-                  'mt-8 block w-full rounded-md py-2 px-3 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fundezy-red'
-                )}
-              >
-                Get Started
-              </button>
+                <button
+                  onClick={() => handleSelectChallenge(tier.id)}
+                  className={classNames(
+                    tier.featured
+                      ? 'bg-fundezy-red text-white shadow-sm hover:bg-red-600'
+                      : 'text-fundezy-red ring-1 ring-inset ring-fundezy-red hover:ring-red-600 dark:ring-red-500 dark:hover:ring-red-400',
+                    'mt-8 block w-full rounded-md py-2 px-3 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fundezy-red'
+                  )}
+                >
+                  Get Started
+                </button>
               ) : (
-              <button
-                onClick={() => setIsWaitingListOpen(true)}
-                className={classNames(
-                  tier.featured
-                    ? 'bg-fundezy-red text-white shadow-sm hover:bg-red-600'
-                    : 'text-fundezy-red ring-1 ring-inset ring-fundezy-red hover:ring-red-600 dark:ring-red-500 dark:hover:ring-red-400',
-                  'mt-8 block w-full rounded-md py-2 px-3 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fundezy-red'
-                )}
-              >
+                <button
+                  onClick={() => setIsWaitingListOpen(true)}
+                  className={classNames(
+                    tier.featured
+                      ? 'bg-fundezy-red text-white shadow-sm hover:bg-red-600'
+                      : 'text-fundezy-red ring-1 ring-inset ring-fundezy-red hover:ring-red-600 dark:ring-red-500 dark:hover:ring-red-400',
+                    'mt-8 block w-full rounded-md py-2 px-3 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fundezy-red'
+                  )}
+                >
                   Join Waiting List
                 </button>
               )}
