@@ -42,9 +42,11 @@ export const TermsAcceptanceFlow = ({ isOpen, onClose, onComplete }: TermsAccept
 
         <div className="h-[60vh] mb-6">
           <iframe
-            src={currentStep === 'tnc' ? tncUrl : picsUrl}
+            src={`https://docs.google.com/gview?url=${encodeURIComponent(currentStep === 'tnc' ? tncUrl : picsUrl)}&embedded=true`}
             className="w-full h-full border border-gray-200 dark:border-gray-700 rounded-lg"
             title={currentStep === 'tnc' ? 'Terms and Conditions' : 'Personal Information Collection Statement'}
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+            allow="fullscreen"
           />
         </div>
 
