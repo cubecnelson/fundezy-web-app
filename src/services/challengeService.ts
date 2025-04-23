@@ -1,16 +1,18 @@
+import { Timestamp } from 'firebase/firestore';
 import { getApiUrl } from '../config/env.config';
 
-interface Timestamp {
-  _seconds: number;
-  _nanoseconds: number;
-}
+
 
 export interface Challenge {
+
   id: string;
   startDate: Timestamp;
   endDate: Timestamp;
+  profitTarget?: number;
   displayDashboard: boolean;
   isEducation: boolean;
+  status?: 'active' | 'completed' | 'failed';
+  userId?: string;
   name: string;
 }
 
@@ -24,7 +26,11 @@ export const challengeService = {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      return data as Challenge[];
+      return data.map((challenge: any) => ({
+        ...challenge,
+        startDate: new Timestamp(challenge.startDate._seconds, challenge.startDate._nanoseconds),
+        endDate: new Timestamp(challenge.endDate._seconds, challenge.endDate._nanoseconds),
+      })) as Challenge[];
     } catch (error) {
       console.error('Error fetching challenges:', error);
       throw error;

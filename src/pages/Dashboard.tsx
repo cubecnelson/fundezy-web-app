@@ -21,6 +21,7 @@ import { useAnalytics } from '../hooks/useAnalytics';
 import { getRankings, type Ranking } from '../services/rankingService';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
+import { ChallengeTracker } from '../components/ChallengeTracker';
 
 export const Dashboard = () => {
   const { user } = useAuth();
@@ -190,6 +191,12 @@ export const Dashboard = () => {
   const selectedAccountIsEducation = selectedAccount?.challengeId && challenges.find(c => c.id === selectedAccount.challengeId)?.isEducation;
   const selectedAccountDisplayDashboard = selectedAccount?.challengeId && challenges.find(c => c.id === selectedAccount.challengeId)?.displayDashboard;
 
+  const selectedChallenge = selectedAccount?.challengeId 
+    ? challenges.find(c => c.id === selectedAccount.challengeId)
+    : null;
+
+  console.log('selectedChallenge', selectedChallenge, selectedChallenge?.startDate?.toDate());
+
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       <div className="mx-auto max-w-7xl px-4 py-8">
@@ -285,10 +292,16 @@ export const Dashboard = () => {
                       Server: {account.server}
                     </p>
                     <div className='h-6'>
-                    {account.challengeId && challenges.find(c => c.id === account.challengeId)?.isEducation && (
-                      <span className="inline-flex items-center mt-1 px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-                        Education
-                      </span>
+                    {account.challengeId && (
+                      challenges.find(c => c.id === account.challengeId)?.isEducation ? (
+                        <span className="inline-flex items-center mt-1 px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+                          Education
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center mt-1 px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300">
+                          Challenge
+                        </span>
+                      )
                     )}
                     </div>
                   </div>
@@ -338,6 +351,20 @@ export const Dashboard = () => {
         {/* Selected Account Dashboard */}
         {selectedAccount && (
           <>
+            {/* Challenge Tracker */}
+            {selectedChallenge && stats && (
+              <div className="mb-8">
+                  <ChallengeTracker
+                    challengeStartDate={selectedChallenge.startDate?.toDate()}
+                    challengeEndDate={selectedChallenge.endDate?.toDate()}
+                  currentProfit={stats.totalGainPercent}
+                  profitTarget={selectedChallenge.profitTarget ?? 0}
+                  dailyLoss={stats.dailyLossPercent}
+                  totalLoss={stats.totalLossPercent}
+                />
+              </div>
+            )}
+
             {/* MT5 Credentials */}
             <MT5Credentials
               server={selectedAccount.server}
