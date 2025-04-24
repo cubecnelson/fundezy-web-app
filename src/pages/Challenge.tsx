@@ -45,6 +45,10 @@ export default function Challenge() {
   };
 
   const handleSelectChallenge = (tierId: string) => {
+    if (!user) {
+      navigate('/signin', { state: { redirectTo: `/checkout/${tierId}` } });
+      return;
+    }
     setSelectedTierId(tierId);
     setIsTermsFlowOpen(true);
   };
@@ -155,7 +159,8 @@ export default function Challenge() {
                   </li>
                 ))}
               </ul>
-              {tier.isAvailable ? (
+              
+              { (tier.isAvailable ? (
                 <button
                   onClick={() => handleSelectChallenge(tier.id)}
                   className={classNames(
@@ -179,7 +184,7 @@ export default function Challenge() {
                 >
                   Join Waiting List
                 </button>
-              )}
+              ))}
             </div>
           ))}
         </div>
