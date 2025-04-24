@@ -113,7 +113,9 @@ function PaymentForm({ selectedTier }: { clientSecret: string; selectedTier: Che
       setError(submitError.message || 'An error occurred with your payment');
       setProcessing(false);
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
-      navigate('/dashboard', { state: { paymentSuccess: true } });
+      setTimeout(() => {
+        navigate('/dashboard', { state: { paymentSuccess: true } });
+      }, 3000);
     }
   };
 
