@@ -207,21 +207,21 @@ const FAQ: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Hero Section */}
-      <section className="bg-black text-white py-16">
+      <section className="bg-gray-50 dark:bg-black text-gray-900 dark:text-white py-16">
         <div className="container mx-auto px-4">
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
             How can we help you?
           </h1>
-          <p className="text-gray-300 text-center mb-8">
+          <p className="text-gray-600 dark:text-gray-300 text-center mb-8">
             Find answers to frequently asked questions about Fundezy's investment platform.
           </p>
           <div className="max-w-2xl mx-auto relative">
             <input
               type="text"
               placeholder="Search for answers..."
-              className="w-full px-12 py-4 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="w-full px-12 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-fundezy-red border border-gray-200 dark:border-gray-700"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -260,8 +260,8 @@ const FAQ: React.FC = () => {
               key={category}
               className={`px-6 py-2 rounded-full transition-colors duration-200 ${
                 activeCategory === category
-                  ? 'bg-red-600 text-white'
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  ? 'bg-fundezy-red text-white'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
               }`}
               onClick={() => setActiveCategory(category)}
             >
@@ -284,11 +284,11 @@ const FAQ: React.FC = () => {
                 className="mb-4"
               >
                 <div
-                  className="bg-gray-800 rounded-lg overflow-hidden cursor-pointer"
+                  className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden cursor-pointer border border-gray-200 dark:border-gray-700"
                   onClick={() => toggleFAQ(faq.id)}
                 >
                   <div className="p-6 flex justify-between items-center">
-                    <h3 className="text-lg font-semibold text-white">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       {highlightText(faq.question, searchQuery)}
                     </h3>
                     <svg
@@ -314,7 +314,7 @@ const FAQ: React.FC = () => {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="px-6 pb-6 text-gray-300"
+                        className="px-6 pb-6 text-gray-600 dark:text-gray-300"
                       >
                         {renderAnswer(faq.answer)}
                       </motion.div>
