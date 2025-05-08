@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useAnalytics } from '../hooks/useAnalytics';
+import { isUniversityEmail } from '../utils/emailValidation';
 
 export default function SignIn() {
   const { signInWithGoogle, signInWithEmail, signUpWithEmail, resetPassword } = useAuth();
@@ -14,6 +15,7 @@ export default function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
   const [isResetPassword, setIsResetPassword] = useState(false);
   const [resetEmailSent, setResetEmailSent] = useState(false);
+  const [showUniversityEmailWarning, setShowUniversityEmailWarning] = useState(false);
 
   useAnalytics('Sign In');
 
@@ -23,6 +25,12 @@ export default function SignIn() {
     setIsLoading(true);
     
     try {
+      if (isSignUp && isUniversityEmail(email)) {
+        setShowUniversityEmailWarning(true);
+        setIsLoading(false);
+        return;
+      }
+
       if (isSignUp) {
         await signUpWithEmail(email, password);
       } else {
@@ -62,6 +70,51 @@ export default function SignIn() {
       setIsLoading(false);
     }
   };
+
+  const handleProceedWithUniversityEmail = async () => {
+    setShowUniversityEmailWarning(false);
+    setIsLoading(true);
+    try {
+      await signUpWithEmail(email, password);
+      navigate('/dashboard');
+    } catch (error: any) {
+      setError(error.message || 'Invalid email or password');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (showUniversityEmailWarning) {
+    return (
+      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div>
+            <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+              Please Use a Personal Email Address
+            </h2>
+            <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+              It looks like you are trying to log in with your university email. For a better experience and to ensure continued access in the future, we recommend registering with your personal email address instead.
+            </p>
+          </div>
+
+          <div className="mt-8 space-y-4">
+            <button
+              onClick={handleProceedWithUniversityEmail}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-fundezy-red hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fundezy-red"
+            >
+              Proceed Anyway
+            </button>
+            <button
+              onClick={() => setShowUniversityEmailWarning(false)}
+              className="w-full flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fundezy-red"
+            >
+              Register with New Email
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isResetPassword) {
     return (
