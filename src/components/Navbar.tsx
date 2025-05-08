@@ -16,6 +16,7 @@ export const Navbar = () => {
     { name: 'How It Works', href: '/how-it-works' },
     { name: 'Pricing', href: '/pricing' },
     { name: 'About', href: '/about' },
+    { name: 'FAQ', href: '/faq' },
   ];
 
   const handleLogout = async () => {

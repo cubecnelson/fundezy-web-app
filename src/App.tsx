@@ -9,6 +9,7 @@ import { HowItWorks } from './pages/HowItWorks';
 import SignIn from './pages/SignIn';
 import InvestorRelations from './pages/InvestorRelations';
 import Admin from './pages/Admin';
+import FAQ from './pages/FAQ';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -86,6 +87,7 @@ export default function App() {
               />
               <Route path="/challenge" element={<Challenge />} />
               <Route path="/about" element={<About />} />
+              <Route path="/faq" element={<FAQ />} />
               <Route path="/investor-relations" element={
                 <PrivateRoute isAdmin={true}>
                   <InvestorRelations />
