@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useAnalytics } from '../hooks/useAnalytics';
 import { isUniversityEmail } from '../utils/emailValidation';
+import { sendEmailVerification } from 'firebase/auth';
 
 export default function SignIn() {
   const { signInWithGoogle, signInWithEmail, signUpWithEmail, resetPassword } = useAuth();
@@ -25,18 +26,22 @@ export default function SignIn() {
     setIsLoading(true);
     
     try {
-      if (isSignUp && isUniversityEmail(email)) {
+      if (isUniversityEmail(email)) {
         setShowUniversityEmailWarning(true);
         setIsLoading(false);
         return;
       }
 
       if (isSignUp) {
-        await signUpWithEmail(email, password);
+        const userCredential = await signUpWithEmail(email, password);
+        if (userCredential.user) {
+          await sendEmailVerification(userCredential.user);
+          navigate('/verify-email');
+        }
       } else {
         await signInWithEmail(email, password);
+        navigate('/dashboard');
       }
-      navigate('/dashboard');
     } catch (error: any) {
       setError(error.message || 'Invalid email or password');
     } finally {
@@ -75,8 +80,11 @@ export default function SignIn() {
     setShowUniversityEmailWarning(false);
     setIsLoading(true);
     try {
-      await signUpWithEmail(email, password);
-      navigate('/dashboard');
+      const userCredential = await signUpWithEmail(email, password);
+      if (userCredential.user) {
+        await sendEmailVerification(userCredential.user);
+        navigate('/verify-email');
+      }
     } catch (error: any) {
       setError(error.message || 'Invalid email or password');
     } finally {
@@ -99,16 +107,16 @@ export default function SignIn() {
 
           <div className="mt-8 space-y-4">
             <button
-              onClick={handleProceedWithUniversityEmail}
+              onClick={() => setShowUniversityEmailWarning(false)}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-fundezy-red hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fundezy-red"
             >
-              Proceed Anyway
+              Register with New Email
             </button>
             <button
-              onClick={() => setShowUniversityEmailWarning(false)}
+              onClick={handleProceedWithUniversityEmail}
               className="w-full flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fundezy-red"
             >
-              Register with New Email
+              Proceed Anyway
             </button>
           </div>
         </div>

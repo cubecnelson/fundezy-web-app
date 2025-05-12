@@ -7,7 +7,8 @@ import {
   signOut,
   onAuthStateChanged,
   User,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  UserCredential
 } from 'firebase/auth';
 import { auth } from '../config/firebase';
 
@@ -16,7 +17,7 @@ interface AuthContextType {
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
-  signUpWithEmail: (email: string, password: string) => Promise<void>;
+  signUpWithEmail: (email: string, password: string) => Promise<UserCredential>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
 }
@@ -65,7 +66,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUpWithEmail = async (email: string, password: string) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      return await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.error('Error signing up with email:', error);
       throw error;

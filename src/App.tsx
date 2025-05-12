@@ -7,9 +7,15 @@ import Challenge from './pages/Challenge';
 import About from './pages/About';
 import { HowItWorks } from './pages/HowItWorks';
 import SignIn from './pages/SignIn';
+import VerifyEmail from './pages/VerifyEmail';
 import InvestorRelations from './pages/InvestorRelations';
 import Admin from './pages/Admin';
 import FAQ from './pages/FAQ';
+import Pics from './pages/Pics';
+import Tnc from './pages/Tnc';
+import DisclaimersAndLegal from './pages/Disclaimers_and_legal';
+import UseOfWebsite from './pages/Use_of_website';
+import Pps from './pages/Pps';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -77,6 +83,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/signin" element={<SignIn />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
               <Route
                 path="/dashboard"
                 element={
@@ -88,6 +95,11 @@ export default function App() {
               <Route path="/challenge" element={<Challenge />} />
               <Route path="/about" element={<About />} />
               <Route path="/faq" element={<FAQ />} />
+              <Route path="/pics" element={<Pics />} />
+              <Route path="/tnc" element={<Tnc />} />
+              <Route path="/disclaimers_and_legal" element={<DisclaimersAndLegal />} />
+              <Route path="/use_of_website" element={<UseOfWebsite />} />
+              <Route path="/pps" element={<Pps />} />
               <Route path="/investor-relations" element={
                 <PrivateRoute isAdmin={true}>
                   <InvestorRelations />
