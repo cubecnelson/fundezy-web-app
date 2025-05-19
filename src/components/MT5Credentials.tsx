@@ -11,10 +11,12 @@ interface MT5CredentialsProps {
   error: string | null;
   email: string;
   status?: string;
+  firstName: string;
+  lastName: string;
   onRefresh: () => void;
 }
 
-export const Credentials = ({ server, login, password, loading, error, email, status = 'active', onRefresh }: MT5CredentialsProps) => {
+export const Credentials = ({ server, login, password, loading, error, email, status = 'active', onRefresh, firstName, lastName }: MT5CredentialsProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [creatingAccount, setCreatingAccount] = useState(false);
   const [createAccountError, setCreateAccountError] = useState<string | null>(null);
@@ -36,7 +38,7 @@ export const Credentials = ({ server, login, password, loading, error, email, st
     
 
     try {
-      const result = await createMTTDemoAccount({email, firstName: 'Nelson', lastName: 'Cheung'})
+      const result = await createMTTDemoAccount({email, firstName, lastName})
       
       if (result.success) {
         setSuccessMessage('Demo account created successfully!');

@@ -197,9 +197,9 @@ export const Dashboard = () => {
     } catch (error) {
       console.error('Error fetching user accounts:', error);
       setError('Failed to fetch user accounts');
+    } finally {
+      setShowCreateAccount(false);
     }
-
-    setShowCreateAccount(false);
   };
 
   const fetchRankings = async () => {
@@ -369,6 +369,8 @@ export const Dashboard = () => {
             server=""
             login=""
             password=""
+            firstName={user?.displayName ?? ''}
+            lastName={''}
             loading={false}
             error={null}
             email={user?.email ?? ''}
@@ -412,6 +414,8 @@ export const Dashboard = () => {
 
             {/* MT5 Credentials */}
             <Credentials
+              firstName={user?.displayName ?? ''}
+              lastName={''}
               server={selectedAccount.server}
               login={selectedAccount.login}
               password={selectedAccount.password}
