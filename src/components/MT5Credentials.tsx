@@ -25,6 +25,10 @@ export const Credentials = ({ server, login, password, loading, error, email, st
   const [copiedLogin, setCopiedLogin] = useState(false);
   const [copiedPassword, setCopiedPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: ''
+  });
 
   useEffect(() => {
     // Show overlay if credentials are empty or account is inactive
@@ -32,13 +36,21 @@ export const Credentials = ({ server, login, password, loading, error, email, st
   }, [server, login, password, status]);
 
   const handleCreateDemoAccount = async () => {
+    if (!formData.firstName || !formData.lastName) {
+      setCreateAccountError('Please enter your first name and last name');
+      return;
+    }
+
     setCreatingAccount(true);
     setCreateAccountError(null);
     setSuccessMessage(null);
-    
 
     try {
-      const result = await createMTTDemoAccount({email, firstName, lastName})
+      const result = await createMTTDemoAccount({
+        email,
+        firstName: formData.firstName,
+        lastName: formData.lastName
+      });
       
       if (result.success) {
         setSuccessMessage('Demo account created successfully!');
@@ -66,9 +78,7 @@ export const Credentials = ({ server, login, password, loading, error, email, st
       }
     } finally {
       setCreatingAccount(false);
-
     }
-
   };
 
   const copyToClipboard = async (text: string, type: 'login' | 'password') => {
@@ -251,20 +261,50 @@ export const Credentials = ({ server, login, password, loading, error, email, st
                 )}
 
                 {status === 'active' && (
-                  <button
-                    onClick={handleCreateDemoAccount}
-                    disabled={creatingAccount}
-                    className="w-full bg-fundezy-red text-white py-2 px-4 rounded hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                  >
-                    {creatingAccount ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
-                        Creating Account...
-                      </>
-                    ) : (
-                      'Create Demo Account'
-                    )}
-                  </button>
+                  <div className="space-y-4">
+                    <div>
+                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        id="firstName"
+                        value={formData.firstName}
+                        onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fundezy-red focus:ring-fundezy-red dark:bg-gray-700 dark:text-white"
+                        placeholder="Enter your first name"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        value={formData.lastName}
+                        onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fundezy-red focus:ring-fundezy-red dark:bg-gray-700 dark:text-white"
+                        placeholder="Enter your last name"
+                        required
+                      />
+                    </div>
+                    <button
+                      onClick={handleCreateDemoAccount}
+                      disabled={creatingAccount}
+                      className="w-full bg-fundezy-red text-white py-2 px-4 rounded hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    >
+                      {creatingAccount ? (
+                        <>
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
+                          Creating Account...
+                        </>
+                      ) : (
+                        'Create Demo Account'
+                      )}
+                    </button>
+                  </div>
                 )}
               </div>
             )}
