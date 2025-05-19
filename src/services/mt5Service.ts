@@ -1,6 +1,6 @@
 import { getApiUrl } from '../config/env.config';
 
-export interface MT5Account {
+export interface TradingAccount {
   demoAccountId: string | undefined;
   challengeId: string | undefined;
   id: string;
@@ -58,7 +58,7 @@ export const fetchDemoAccountAssignedTo = async (mt5AccountId: string): Promise<
   }
 };
 
-export const fetchMT5AccountById = async (id: string): Promise<MT5Account> => {
+export const fetchMT5AccountById = async (id: string): Promise<TradingAccount> => {
   if (!id) {
     throw new Error('ID is required to fetch MT5 account');
   }
@@ -100,7 +100,7 @@ export const fetchDemoAccountByEmail = async (email: string): Promise<DemoAccoun
 };
 
 
-export const fetchMT5Account = async (email: string): Promise<MT5Account[]> => {
+export const fetchMT5Account = async (email: string): Promise<TradingAccount[]> => {
   if (!email) {
     throw new Error('Email is required to fetch MT5 account');
   }
@@ -137,7 +137,7 @@ const logAccountRemoval = async (auditData: AuditLog): Promise<void> => {
   }
 };
 
-export const clearMT5Account = async (account: MT5Account): Promise<void> => {
+export const clearMT5Account = async (account: TradingAccount): Promise<void> => {
   try {
     // Log the account removal first
     await logAccountRemoval({
@@ -175,6 +175,8 @@ export const clearMT5Account = async (account: MT5Account): Promise<void> => {
     throw error;
   }
 };
+
+
 
 export const createDemoAccount = async (email: string): Promise<{ success: boolean; message: string }> => {
   if (!email) {

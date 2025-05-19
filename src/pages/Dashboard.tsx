@@ -10,9 +10,9 @@ import {
   ReferenceLine,
 } from 'recharts';
 import { useAuth } from '../contexts/AuthContext';
-import { DemoAccount, fetchDemoAccountAssignedTo, fetchMT5Account, type MT5Account } from '../services/mt5Service';
+import { DemoAccount, fetchDemoAccountAssignedTo, fetchMT5Account, type TradingAccount } from '../services/mt5Service';
 import { dashboardService, type Stats, type EquityData, type UnderwaterData, type Trade } from '../services/dashboardService';
-import { MT5Credentials } from '../components/MT5Credentials';
+import { Credentials } from '../components/MT5Credentials';
 import { RankingsTable, type RankingType } from '../components/RankingsTable';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import TeamUserTable from '../components/TeamUserTable';
@@ -22,6 +22,8 @@ import { getRankings, type Ranking } from '../services/rankingService';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { ChallengeTracker } from '../components/ChallengeTracker';
+import { mttAccountService } from '../services/mttAccountService';
+import { mttTradingAccountService } from '../services/mttTradingAccountService';
 
 export const Dashboard = () => {
   const { user } = useAuth();
@@ -29,8 +31,8 @@ export const Dashboard = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [mt5Accounts, setMT5Accounts] = useState<MT5Account[]>([]);
-  const [selectedAccount, setSelectedAccount] = useState<MT5Account | null>(null);
+  const [mt5Accounts, setMT5Accounts] = useState<TradingAccount[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState<TradingAccount | null>(null);
   const [stats, setStats] = useState<Stats | null>(null);
   const [equityData, setEquityData] = useState<EquityData[]>([]);
   const [underwaterData, setUnderwaterData] = useState<UnderwaterData[]>([]);
@@ -100,8 +102,6 @@ export const Dashboard = () => {
       console.error('Error fetching challenges:', error);
     }
   }
-  
-
 
   const fetchUserAccounts = async () => {
     setLoading(true);
@@ -109,16 +109,55 @@ export const Dashboard = () => {
       if (!user?.email) {
         throw new Error('User email is required');
       }
-      
-      const accounts = await fetchMT5Account(user.email);
+      var accounts: TradingAccount[] = [];
+      const mt5Accounts = await fetchMT5Account(user.email);
+      accounts = [...mt5Accounts];
+      try {
+        
+        const mttTradingAccountsPromise =  mttTradingAccountService.getTradingAccountByEmail(user.email);
+        const mttAccountPromise = mttAccountService.getAccountByEmail(user.email);
+        const result = await Promise.all([mttAccountPromise, mttTradingAccountsPromise]);
+        const mttTradingAccounts = result[1];
+        const mttAccount = result[0];
+
+        // Transform MTT accounts into MT5Account format
+        const transformedMTTAccounts: TradingAccount[] = mttTradingAccounts.map(mttTradingAccount => ({
+          id: mttTradingAccount.id,
+          server: 'MTT', // Default server for MTT accounts
+          login: mttAccount.email || '', // Use login if available, otherwise empty string
+          password: mttAccount.password || '', // MTT accounts don't have password
+          email: mttAccount.email || '', // Ensure email is always a string
+          status: 'active',
+          createdAt: {
+            _seconds: new Date(mttTradingAccount.created).getTime() / 1000,
+            _nanoseconds: 0
+          },
+          updatedAt: {
+            _seconds: new Date(mttTradingAccount.created).getTime() / 1000, // Use created time as updated time if not available
+            _nanoseconds: 0
+          },
+          demoAccountId: undefined,
+          challengeId: undefined
+        }));
+
+        // Combine both MT5 and MTT accounts
+        accounts = [...accounts, ...transformedMTTAccounts];
+       
+      } catch (error) {
+        console.error('Error fetching MTT accounts:', error);
+      }
+
       setMT5Accounts(accounts);
-      
-      // Select the first active account by default
-      const activeAccount = accounts.find((acc: MT5Account) => acc.status === 'active');
+
+      const activeAccount = accounts.find((acc: TradingAccount) => acc.status === 'active');
+
       if (activeAccount) {
         setSelectedAccount(activeAccount);
-        
       }
+      
+      
+      // Select the first active account by default
+      
     } catch (err) {
       console.error('Error fetching MT5 accounts:', err);
       setError('Failed to load your trading accounts');
@@ -153,7 +192,13 @@ export const Dashboard = () => {
   };
 
   const handleAccountCreated = async () => {
-    await fetchUserAccounts();
+    try {
+      await fetchUserAccounts();
+    } catch (error) {
+      console.error('Error fetching user accounts:', error);
+      setError('Failed to fetch user accounts');
+    }
+
     setShowCreateAccount(false);
   };
 
@@ -320,7 +365,7 @@ export const Dashboard = () => {
 
         {/* MT5 Credentials for Create Account */}
         {showCreateAccount && (
-          <MT5Credentials
+          <Credentials
             server=""
             login=""
             password=""
@@ -366,7 +411,7 @@ export const Dashboard = () => {
             )}
 
             {/* MT5 Credentials */}
-            <MT5Credentials
+            <Credentials
               server={selectedAccount.server}
               login={selectedAccount.login}
               password={selectedAccount.password}
@@ -377,8 +422,8 @@ export const Dashboard = () => {
               onRefresh={fetchUserAccounts}
             />
 
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+           {/* Main Content Grid */}
+          {selectedAccountDisplayDashboard &&  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Equity Chart */}
               <div className="lg:col-span-2">
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
@@ -419,10 +464,10 @@ export const Dashboard = () => {
                   ))}
                 </ul>
               </div>
-            </div>
+            </div>}
 
             {/* Trading History */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+          {selectedAccountDisplayDashboard &&  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
               {/* Previous Trades */}
               <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
                 <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Previous Trades</h3>
@@ -531,10 +576,10 @@ export const Dashboard = () => {
                   </div>
                 )}
               </div>
-            </div>
+            </div>}
 
             {/* Underwater Chart */}
-            <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            {selectedAccountDisplayDashboard &&  <div className="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
               <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
                 Drawdown Recovery
               </h3>
@@ -550,9 +595,10 @@ export const Dashboard = () => {
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-            </div>
+            </div>}
           </>
         )}
+        
 
         {teamUsers && teamUsers.length > 0 && <div className="mt-8">
           <TeamUserTable teamUsers={teamUsers} />

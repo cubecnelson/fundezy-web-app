@@ -14,6 +14,8 @@ export const API_CONFIG = {
     CHALLENGES: '/api',
     MT5_ACCOUNTS: '/mt5Accounts',
     TIERS: '/tiers',
+    MTT_ACCOUNTS: '/mttAccounts',
+    MTT_TRADING_ACCOUNTS: '/mttTradingAccounts',
   },
 } as const;
 

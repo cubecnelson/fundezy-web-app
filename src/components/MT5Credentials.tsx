@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { EyeIcon, EyeSlashIcon, ClipboardIcon, ClipboardDocumentCheckIcon } from '@heroicons/react/24/outline';
-import { createDemoAccount } from '../services/mt5Service';
+import { createMTTDemoAccount } from '../services/matchTraderService';
 import { FeedbackForm } from './FeedbackForm';
 
 interface MT5CredentialsProps {
@@ -14,7 +14,7 @@ interface MT5CredentialsProps {
   onRefresh: () => void;
 }
 
-export const MT5Credentials = ({ server, login, password, loading, error, email, status = 'active', onRefresh }: MT5CredentialsProps) => {
+export const Credentials = ({ server, login, password, loading, error, email, status = 'active', onRefresh }: MT5CredentialsProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [creatingAccount, setCreatingAccount] = useState(false);
   const [createAccountError, setCreateAccountError] = useState<string | null>(null);
@@ -33,13 +33,18 @@ export const MT5Credentials = ({ server, login, password, loading, error, email,
     setCreatingAccount(true);
     setCreateAccountError(null);
     setSuccessMessage(null);
+    
 
     try {
-      const result = await createDemoAccount(email);
+      const result = await createMTTDemoAccount({email, firstName: 'Nelson', lastName: 'Cheung'})
       
       if (result.success) {
         setSuccessMessage('Demo account created successfully!');
-        await onRefresh();
+        try {
+          await onRefresh();
+        } catch (error) {
+          console.error('Failed to refresh credentials: ', error);
+        }
         setShowOverlay(false);
         
         // Clear success message after 3 seconds
@@ -59,7 +64,9 @@ export const MT5Credentials = ({ server, login, password, loading, error, email,
       }
     } finally {
       setCreatingAccount(false);
+
     }
+
   };
 
   const copyToClipboard = async (text: string, type: 'login' | 'password') => {
@@ -78,7 +85,7 @@ export const MT5Credentials = ({ server, login, password, loading, error, email,
   };
 
   const openWebTerminal = () => {
-    const baseUrl = 'https://web.metatrader.app/terminal';
+    const baseUrl = server === 'MTT' ? 'https://platform.fundezy.io' : 'https://web.metatrader.app/terminal';
     const params = new URLSearchParams({
       mode: 'demo',
       server,
