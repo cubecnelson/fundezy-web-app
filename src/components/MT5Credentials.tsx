@@ -16,7 +16,7 @@ interface MT5CredentialsProps {
   onRefresh: () => void;
 }
 
-export const Credentials = ({ server, login, password, loading, error, email, status = 'active', onRefresh, firstName, lastName }: MT5CredentialsProps) => {
+export const Credentials = ({ server, login, password, loading, error, email, status = 'active', onRefresh }: MT5CredentialsProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [creatingAccount, setCreatingAccount] = useState(false);
   const [createAccountError, setCreateAccountError] = useState<string | null>(null);
