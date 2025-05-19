@@ -16,6 +16,7 @@ export const API_CONFIG = {
     TIERS: '/tiers',
     MTT_ACCOUNTS: '/mttAccounts',
     MTT_TRADING_ACCOUNTS: '/mttTradingAccounts',
+    MTT_PROXY: '/mttProxy',
   },
 } as const;
 

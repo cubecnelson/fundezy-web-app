@@ -9,17 +9,17 @@ import {
 } from '../types/matchTrader.types';
 import { mttAccountService } from './mttAccountService';
 import { mttTradingAccountService } from './mttTradingAccountService';
+import { getApiUrl } from '../config/env.config';
 
 const AUTH_TOKEN = "Bearer vL151ojBexVGnlLYXUR4vIdXuA-xXxiCqwqDSR5bIws=";
-const BASE_URL = 'production' === 'production' 
-  ? 'https://broker-api-prop.match-trade.com'
-  : '/api/match-trader';
+const BASE_URL = getApiUrl('MTT_PROXY');
+
 
 export const createMatchTraderAccount = async (
   requestData: CreateAccountRequest,
 ): Promise<CreateAccountResponse> => {
   try {
-    const response = await fetch(`${BASE_URL}/v1/accounts`, {
+    const response = await fetch(`${BASE_URL}/accounts`, {
       method: 'POST',
       headers: {
         'Authorization': AUTH_TOKEN,
@@ -60,7 +60,7 @@ export const createTradingAccount = async (
     const queryString = new URLSearchParams(queryParamsObj).toString();
 
     const response = await fetch(
-      `${BASE_URL}/v1/prop/accounts?${queryString}`,
+      `${BASE_URL}/prop/accounts?${queryString}`,
       {
         method: 'POST',
         headers: {
@@ -90,7 +90,7 @@ export const getAccountByEmail = async (
 ): Promise<GetAccountByEmailResponse> => {
   try {
     const response = await fetch(
-      `${BASE_URL}/v1/accounts/by-email/${email}`,
+      `${BASE_URL}/accounts/by-email/${email}`,
       {
         method: 'GET',
         headers: {
