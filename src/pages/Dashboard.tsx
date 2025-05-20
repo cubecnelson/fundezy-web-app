@@ -63,6 +63,16 @@ export const Dashboard = () => {
   }, [location.state, navigate]);
 
   useEffect(() => {
+    // Check for showCreateAccount state from navigation
+    if (location.state?.showCreateAccount) {
+      setShowCreateAccount(true);
+      
+      // Clear the state to prevent showing the overlay again on refresh
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.state, navigate]);
+
+  useEffect(() => {
     if (user?.email) {
       fetchUserAccounts();
       fetchRankings();

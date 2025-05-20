@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import { CheckIcon } from '@heroicons/react/24/outline';
 import { WaitingListModal } from '../components/WaitingListModal';
 import { useAnalytics } from '../hooks/useAnalytics';
-import { getChallenges } from '../services/matchTraderService';
+import { getAccountByEmail, getChallenges } from '../services/matchTraderService';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-
 const tiersMap = {
   "7cc659d9-04a0-42c0-a946-9eed8ee9ae13": (initialBalance: number, fee: number) => ({
     name: 'Standard Challenge',
@@ -88,6 +87,36 @@ export default function Pricing() {
     fetchChallenges();
   }, []);
 
+  const handleGetStarted = async () => {
+    if (!user) {
+      navigate('/signin');
+      return;
+    }
+
+    if (!user.email) {
+      console.error('User email is missing');
+      navigate('/signin');
+      return;
+    }
+
+    try {
+      // Check if user has a matchTrader account
+      const mttAccount = await getAccountByEmail(user.email);
+
+      if (mttAccount) {
+        // User has matchTrader account, redirect to platform
+        window.open("https://platform.fundezy.io/register?demo=false&competitions=false", "_blank");
+      } else {
+        // User doesn't have matchTrader account, redirect to dashboard
+        navigate('/dashboard', { state: { showCreateAccount: true } });
+      }
+    } catch (error) {
+      console.error('Error checking matchTrader account:', error);
+      // If there's an error, assume user doesn't have an account and redirect to dashboard
+      navigate('/dashboard', { state: { showCreateAccount: true } });
+    }
+  };
+
   return (
     <div className="bg-white dark:bg-gray-900 py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -138,13 +167,7 @@ export default function Pricing() {
                 </ul>
               </div>
               <button
-                onClick={() => {
-                  if (user) {
-                    open("https://platform.fundezy.io/register?demo=false&competitions=false")
-                  } else {
-                    navigate('/signin');
-                  }
-                }}
+                onClick={handleGetStarted}
                 className={classNames(
                   tier.featured
                     ? 'bg-fundezy-red text-white shadow-sm hover:bg-red-600'
