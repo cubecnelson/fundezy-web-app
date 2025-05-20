@@ -158,6 +158,9 @@ export const createMTTDemoAccount = async (
           firstname: params.firstName,
           lastname: params.lastName,
         },
+        accountConfiguration: {
+          branchUuid: "0f74ff1d-ed23-4848-807c-8cdaaf2cfb82",
+        },
       };
 
       // Step 1: Create Match Trader account

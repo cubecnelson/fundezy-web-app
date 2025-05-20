@@ -24,16 +24,16 @@ export interface ContactDetails {
 }
 
 export interface AccountConfiguration {
-  partnerId: string | null;
-  branchUuid: string;
-  roleUuid: string;
-  accountManagerUuid: string;
-  ibParentTradingAccountUuid: string;
-  crmUserScope: {
+  partnerId?: string | null;
+  branchUuid?: string;
+  roleUuid?: string;
+  accountManagerUuid?: string;
+  ibParentTradingAccountUuid?: string;
+  crmUserScope?: {
     branchScope: string[];
     managerPools: string[];
   };
-  accountTypeContact: boolean;
+  accountTypeContact?: boolean;
 }
 
 export interface AddressDetails {
