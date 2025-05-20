@@ -224,4 +224,84 @@ export const createMTTDemoAccount = async (
       message: error.message || 'Failed to create MTT demo account'
     };
   }
+};
+
+export interface ProfitSplitPercentages {
+  broker: number;
+  trader: number;
+}
+
+export interface Branch {
+  uuid: string;
+  name: string;
+}
+
+export interface System {
+  uuid: string;
+  name: string;
+}
+
+export interface Operation {
+  uuid: string;
+  name: string;
+}
+
+export interface Phase {
+  id: string;
+  phaseStep: number;
+  phaseName: string;
+  isFunded: boolean;
+  profitSplitPercentages: ProfitSplitPercentages;
+  groupName: string;
+  initialBalance: number;
+  initialLeverage: number;
+  tradingPeriod: number;
+  minimumTradingPeriod: number;
+  maxDailyLossPercentage: number;
+  maxLossPercentage: number;
+  profitTargetPercentage: number;
+  maxDailyLossCalculationType: 'EQUITY';
+  autoEvaluationEnabled: boolean;
+  offerUuid: string;
+  kycRequired: boolean;
+  lockAccountOnWithdrawalRequested: boolean;
+}
+
+export interface Challenge {
+  challengeId: string;
+  brokerId: number;
+  name: string;
+  currency: string;
+  description: string;
+  branch: Branch;
+  system: System;
+  operation: Operation;
+  isHidden: boolean;
+  challengeStatisticsEnabled: boolean;
+  fee: number;
+  phases: Phase[];
+}
+
+export const getChallenges = async (): Promise<Challenge[]> => {
+  try {
+    const response = await fetch(`${BASE_URL}/prop/challenges`, {
+      method: 'GET',
+      headers: {
+        'Authorization': AUTH_TOKEN,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      throw new Error(
+        errorData?.message || `Failed to fetch challenges: ${response.statusText}`
+      );
+    }
+
+    return await response.json();
+  } catch (error: any) {
+    console.error('Error fetching challenges:', error);
+    throw error;
+  }
 }; 
