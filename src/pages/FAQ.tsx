@@ -22,12 +22,6 @@ const faqData: FAQItem[] = [
     question: 'Who can use Fundezy.io?',
     answer: 'Anyone looking for funding opportunities, including students, researchers, and entrepreneurs, can use Fundezy.io.'
   },
-  {
-    id: 3,
-    category: 'General Questions',
-    question: 'Is Fundezy.io free to use?',
-    answer: 'Yes, Fundezy.io is free to use during its initial launch phase.'
-  },
 
   // Account and Verification
   {
@@ -41,32 +35,6 @@ const faqData: FAQItem[] = [
     category: 'Account and Verification',
     question: 'Do I need to verify my identity?',
     answer: 'Yes, identity verification is required to ensure a secure and trustworthy platform.'
-  },
-  {
-    id: 6,
-    category: 'Account and Verification',
-    question: 'Can I have multiple accounts?',
-    answer: 'No, each user is allowed only one account to maintain fairness.'
-  },
-
-  // Funding Process
-  {
-    id: 7,
-    category: 'Funding Process',
-    question: 'How does the funding process work?',
-    answer: 'Once you apply for funding, your application will be reviewed, and you will be notified of the outcome.'
-  },
-  {
-    id: 8,
-    category: 'Funding Process',
-    question: 'What types of funding are available?',
-    answer: 'Fundezy.io offers various funding options, including grants, scholarships, and project-based funding.'
-  },
-  {
-    id: 9,
-    category: 'Funding Process',
-    question: 'How long does it take to get funded?',
-    answer: 'The timeline depends on the type of funding and the review process, but we aim to keep it as quick as possible.'
   },
 
   // Challenge Overview
@@ -137,7 +105,7 @@ const faqData: FAQItem[] = [
     id: 18,
     category: 'Support and Assistance',
     question: 'Who can I contact for support?',
-    answer: 'You can reach out to our support team via email or live chat for assistance.'
+    answer: 'You can reach out to our support team via email for assistance.'
   },
   {
     id: 19,

@@ -110,7 +110,7 @@ export const Credentials = ({ server, login, password, loading, error, email, st
   if (loading) {
     return (
       <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-8">
-        <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">MT5 Credentials</h3>
+        <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Credentials</h3>
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-fundezy-red"></div>
           <span className="ml-3 text-gray-600 dark:text-gray-400">Loading credentials...</span>
@@ -122,7 +122,7 @@ export const Credentials = ({ server, login, password, loading, error, email, st
   if (error) {
     return (
       <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-8">
-        <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">MT5 Credentials</h3>
+        <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Credentials</h3>
         <div className="text-center text-red-600 dark:text-red-400">{error}</div>
       </div>
     );
@@ -131,7 +131,7 @@ export const Credentials = ({ server, login, password, loading, error, email, st
   return (
     <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-8 relative">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">MT5 Credentials</h3>
+        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">Credentials</h3>
         {server && login && password && status === 'active' && (
           <button
             onClick={openWebTerminal}
