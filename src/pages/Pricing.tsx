@@ -98,7 +98,7 @@ export default function Pricing() {
 
       if (mttAccount) {
         // User has matchTrader account, redirect to platform
-        window.open("https://platform.fundezy.io/register?demo=false&competitions=false", "_blank");
+        window.open("https://platform.fundezy.io", "_blank");
       } else {
         // User doesn't have matchTrader account, redirect to dashboard
         navigate('/dashboard', { state: { showCreateAccount: true } });
