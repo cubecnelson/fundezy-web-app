@@ -1,4 +1,4 @@
-export const isUat = false;
+export const isUat = true;
 
 export const API_CONFIG = {
   BASE_URL: 'https://us-central1-fundezy-app.cloudfunctions.net',
