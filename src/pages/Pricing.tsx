@@ -6,6 +6,21 @@ import { getAccountByEmail, getChallenges } from '../services/matchTraderService
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 const tiersMap = {
+  "26135048-f2ce-48ad-a633-df3646eb48ad": (initialBalance: number, fee: number) => ({
+    name: 'Special Challenge',
+    id: 'tier-special',
+    priceMonthly: fee,
+    description: 'Perfect for traders starting with a smaller account.',
+    features: [
+      `$${initialBalance} funded account`,
+      '10% profit target',
+      'Maximum 5% daily drawdown',
+      'Maximum 10% total drawdown',
+      '30-day trading period',
+      'Real-time tracking',
+    ],
+    featured: false,
+  }),
   "7cc659d9-04a0-42c0-a946-9eed8ee9ae13": (initialBalance: number, fee: number) => ({
     name: 'Standard Challenge',
     id: 'tier-standard',
@@ -70,7 +85,7 @@ export default function Pricing() {
     const challenges = await getChallenges();
     const activeChallenges = challenges.filter((c) => c.isHidden === false);
     console.log(activeChallenges);
-    setTiers(activeChallenges.map((c) => {
+    setTiers(activeChallenges.sort((a, b) => a.fee - b.fee).map((c) => {
       const tierFunction = tiersMap[c.challengeId as keyof typeof tiersMap];
       return tierFunction ? tierFunction(c.phases[0].initialBalance, c.fee) : null;
     }).filter((t) => t != null));
@@ -122,7 +137,7 @@ export default function Pricing() {
             Choose the account size that matches your trading goals and experience level.
           </p>
         </div>
-        <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-8">
+        <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-4 lg:gap-x-8">
           {tiers.map((tier) => (
             <div
               key={tier.id}

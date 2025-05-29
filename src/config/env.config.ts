@@ -1,4 +1,4 @@
-export const isUat = true;
+export const isUat = false;
 
 export const API_CONFIG = {
   BASE_URL: 'https://us-central1-fundezy-app.cloudfunctions.net',
@@ -17,6 +17,7 @@ export const API_CONFIG = {
     MTT_ACCOUNTS: '/mttAccounts',
     MTT_TRADING_ACCOUNTS: '/mttTradingAccounts',
     MTT_PROXY: '/mttProxy',
+    SSO_REDIRECT_URL: '/mttProxy/signin',
   },
 } as const;
 
