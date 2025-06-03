@@ -63,10 +63,10 @@ export const Credentials = ({ server, login, password, loading, error, email, st
         }
         setShowOverlay(false);
         
-        // Clear success message after 3 seconds
+        // Clear success message after 5 seconds
         setTimeout(() => {
           setSuccessMessage(null);
-        }, 3000);
+        }, 5000);
       } else {
         setCreateAccountError(result.message);
         if (result.message.includes('No demo accounts available')) {
@@ -99,7 +99,7 @@ export const Credentials = ({ server, login, password, loading, error, email, st
   };
 
   const getTerminalUrl = () => {
-    const baseUrl = `https://broker-api-prop.match-trade.com?redirect_url=${getApiUrl('SSO_REDIRECT_URL')}`;
+    const baseUrl = `https://platform.fundezy.io?redirect_url=${'https%3A%2F%2Fus-central1-fundezy-app-uat.cloudfunctions.net%2FmttProxy%2Fsignin'}`;
     
     return `${baseUrl}`;
   };
@@ -262,9 +262,19 @@ export const Credentials = ({ server, login, password, loading, error, email, st
                 />
               ) : (
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl">
-                  <h4 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                    {status !== 'active' ? 'Account Inactive' : 'Create Demo Account'}
-                  </h4>
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      {status !== 'active' ? 'Account Inactive' : 'Create Demo Account'}
+                    </h4>
+                    <button
+                      onClick={() => setShowOverlay(false)}
+                      className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
+                    >
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
                   <p className="text-gray-600 dark:text-gray-300 mb-6">
                     {status !== 'active' 
                       ? 'Your account is currently inactive. Please contact support for assistance.'
