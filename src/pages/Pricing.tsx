@@ -5,6 +5,9 @@ import { useAnalytics } from '../hooks/useAnalytics';
 import { getAccountByEmail, getChallenges } from '../services/matchTraderService';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { isUniversityEmail } from '../utils/domainCheck';
+import { UniversityDomainPopup } from '../components/UniversityDomainPopup';
+
 const tiersMap = {
   "26135048-f2ce-48ad-a633-df3646eb48ad": (initialBalance: number, fee: number) => ({
     name: 'Special Challenge',
@@ -77,6 +80,7 @@ export default function Pricing() {
   const { user } = useAuth();
   const [tiers, setTiers] = useState<any[]>([]);
   const [isWaitingListOpen, setIsWaitingListOpen] = useState(false);
+  const [showUniversityPopup, setShowUniversityPopup] = useState(false);
   useAnalytics('Pricing');
   const navigate = useNavigate();
 
@@ -96,6 +100,11 @@ export default function Pricing() {
   }, []);
 
   const handleGetStarted = async () => {
+    if (user?.email && isUniversityEmail(user.email)) {
+      setShowUniversityPopup(true);
+      return;
+    }
+
     if (!user) {
       navigate('/signin');
       return;
@@ -193,6 +202,12 @@ export default function Pricing() {
       <WaitingListModal
         isOpen={isWaitingListOpen}
         onClose={() => setIsWaitingListOpen(false)}
+      />
+
+      {/* University Domain Popup */}
+      <UniversityDomainPopup
+        isOpen={showUniversityPopup}
+        onClose={() => setShowUniversityPopup(false)}
       />
     </div>
   );

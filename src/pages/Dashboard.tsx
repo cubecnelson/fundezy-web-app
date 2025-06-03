@@ -24,6 +24,8 @@ import { CheckCircleIcon } from '@heroicons/react/24/solid';
 import { ChallengeTracker } from '../components/ChallengeTracker';
 import { mttAccountService } from '../services/mttAccountService';
 import { mttTradingAccountService } from '../services/mttTradingAccountService';
+import { isUniversityEmail } from '../utils/domainCheck';
+import { UniversityDomainPopup } from '../components/UniversityDomainPopup';
 
 export const Dashboard = () => {
   const { user } = useAuth();
@@ -45,6 +47,7 @@ export const Dashboard = () => {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [rankings, setRankings] = useState<Ranking[]>([]);
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
+  const [showUniversityPopup, setShowUniversityPopup] = useState(false);
 
   useAnalytics('Dashboard');
 
@@ -196,7 +199,11 @@ export const Dashboard = () => {
     }
   };
 
-  const handleCreateAccount = () => {
+  const handleCreateAccount = async () => {
+    if (user?.email && isUniversityEmail(user.email)) {
+      setShowUniversityPopup(true);
+      return;
+    }
     setSelectedAccount(null);
     setShowCreateAccount(true);
   };
@@ -220,6 +227,14 @@ export const Dashboard = () => {
       console.error('Error fetching rankings:', error);
       setError('Failed to fetch rankings');
     }
+  };
+
+  const handleOpenWebTerminal = () => {
+    if (user?.email && isUniversityEmail(user.email)) {
+      setShowUniversityPopup(true);
+      return;
+    }
+    // ... rest of the existing handleOpenWebTerminal code ...
   };
 
   if (loading) {
@@ -618,6 +633,12 @@ export const Dashboard = () => {
           <TeamUserTable teamUsers={teamUsers} />
         </div>}
       </div>
+
+      {/* University Domain Popup */}
+      <UniversityDomainPopup
+        isOpen={showUniversityPopup}
+        onClose={() => setShowUniversityPopup(false)}
+      />
     </div>
   );
 };
