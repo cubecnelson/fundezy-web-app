@@ -17,7 +17,7 @@ interface MT5CredentialsProps {
   onRefresh: () => void;
 }
 
-export const Credentials = ({ server, login, password, loading, error, email, status = 'active', onRefresh }: MT5CredentialsProps) => {
+export const Credentials = ({ server, login, password, loading, error, email, status = 'active', firstName, lastName, onRefresh }: MT5CredentialsProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [creatingAccount, setCreatingAccount] = useState(false);
   const [createAccountError, setCreateAccountError] = useState<string | null>(null);
@@ -28,8 +28,8 @@ export const Credentials = ({ server, login, password, loading, error, email, st
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [showFullscreenIframe, setShowFullscreenIframe] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: ''
+    firstName: firstName || '',
+    lastName: lastName || ''
   });
 
   useEffect(() => {
@@ -289,34 +289,38 @@ export const Credentials = ({ server, login, password, loading, error, email, st
 
                   {status === 'active' && (
                     <div className="space-y-4">
-                      <div>
-                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                          First Name
-                        </label>
-                        <input
-                          type="text"
-                          id="firstName"
-                          value={formData.firstName}
-                          onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fundezy-red focus:ring-fundezy-red dark:bg-gray-700 dark:text-white"
-                          placeholder="Enter your first name"
-                          required
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                          Last Name
-                        </label>
-                        <input
-                          type="text"
-                          id="lastName"
-                          value={formData.lastName}
-                          onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
-                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fundezy-red focus:ring-fundezy-red dark:bg-gray-700 dark:text-white"
-                          placeholder="Enter your last name"
-                          required
-                        />
-                      </div>
+                      {!firstName && !lastName && (
+                        <>
+                          <div>
+                            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              First Name
+                            </label>
+                            <input
+                              type="text"
+                              id="firstName"
+                              value={formData.firstName}
+                              onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
+                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fundezy-red focus:ring-fundezy-red dark:bg-gray-700 dark:text-white"
+                              placeholder="Enter your first name"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                              Last Name
+                            </label>
+                            <input
+                              type="text"
+                              id="lastName"
+                              value={formData.lastName}
+                              onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-fundezy-red focus:ring-fundezy-red dark:bg-gray-700 dark:text-white"
+                              placeholder="Enter your last name"
+                              required
+                            />
+                          </div>
+                        </>
+                      )}
                       <button
                         onClick={handleCreateDemoAccount}
                         disabled={creatingAccount}

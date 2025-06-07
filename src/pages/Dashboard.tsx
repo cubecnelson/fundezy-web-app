@@ -394,8 +394,8 @@ export const Dashboard = () => {
             server=""
             login=""
             password=""
-            firstName={user?.displayName ?? ''}
-            lastName={''}
+            firstName={user?.displayName?.split(' ')[0] ?? ''}
+            lastName={user?.displayName?.split(' ').slice(1).join(' ') ?? ''}
             loading={false}
             error={null}
             email={user?.email ?? ''}
@@ -426,9 +426,9 @@ export const Dashboard = () => {
             {/* Challenge Tracker */}
             {selectedChallenge && stats && (
               <div className="mb-8">
-                  <ChallengeTracker
-                    challengeStartDate={selectedChallenge.startDate?.toDate()}
-                    challengeEndDate={selectedChallenge.endDate?.toDate()}
+                <ChallengeTracker
+                  challengeStartDate={selectedChallenge.startDate?.toDate()}
+                  challengeEndDate={selectedChallenge.endDate?.toDate()}
                   currentProfit={stats.totalGainPercent}
                   profitTarget={selectedChallenge.profitTarget ?? 0}
                   dailyLoss={stats.dailyLossPercent}
@@ -439,8 +439,8 @@ export const Dashboard = () => {
 
             {/* MT5 Credentials */}
             <Credentials
-              firstName={user?.displayName ?? ''}
-              lastName={''}
+              firstName={user?.displayName?.split(' ')[0] ?? ''}
+              lastName={user?.displayName?.split(' ').slice(1).join(' ') ?? ''}
               server={selectedAccount.server}
               login={selectedAccount.login}
               password={selectedAccount.password}
