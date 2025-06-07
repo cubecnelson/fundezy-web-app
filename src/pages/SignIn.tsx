@@ -10,7 +10,10 @@ export default function SignIn() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
+  const [signUpStage, setSignUpStage] = useState<'name-email' | 'password'>('name-email');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +36,12 @@ export default function SignIn() {
       }
 
       if (isSignUp) {
-        const userCredential = await signUpWithEmail(email, password);
+        if (signUpStage === 'name-email') {
+          setSignUpStage('password');
+          setIsLoading(false);
+          return;
+        }
+        const userCredential = await signUpWithEmail(email, password, firstName, lastName);
         if (userCredential.user) {
           await sendEmailVerification(userCredential.user);
           navigate('/verify-email');
@@ -80,7 +88,7 @@ export default function SignIn() {
     setShowUniversityEmailWarning(false);
     setIsLoading(true);
     try {
-      const userCredential = await signUpWithEmail(email, password);
+      const userCredential = await signUpWithEmail(email, password, firstName, lastName);
       if (userCredential.user) {
         await sendEmailVerification(userCredential.user);
         navigate('/verify-email');
@@ -90,6 +98,15 @@ export default function SignIn() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleBackToNameEmail = () => {
+    setSignUpStage('name-email');
+  };
+
+  const handleToggleSignUp = () => {
+    setIsSignUp(!isSignUp);
+    setSignUpStage('name-email');
   };
 
   if (showUniversityEmailWarning) {
@@ -210,6 +227,42 @@ export default function SignIn() {
 
         <form className="mt-8 space-y-6" onSubmit={handleEmailAuth}>
           <div className="rounded-md shadow-sm -space-y-px">
+            {isSignUp && signUpStage === 'name-email' && (
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label htmlFor="first-name" className="sr-only">
+                    First name
+                  </label>
+                  <input
+                    id="first-name"
+                    name="firstName"
+                    type="text"
+                    autoComplete="given-name"
+                    required
+                    className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white focus:outline-none focus:ring-fundezy-red focus:border-fundezy-red focus:z-10 sm:text-sm bg-white dark:bg-gray-700"
+                    placeholder="First name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="last-name" className="sr-only">
+                    Last name
+                  </label>
+                  <input
+                    id="last-name"
+                    name="lastName"
+                    type="text"
+                    autoComplete="family-name"
+                    required
+                    className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white focus:outline-none focus:ring-fundezy-red focus:border-fundezy-red focus:z-10 sm:text-sm bg-white dark:bg-gray-700"
+                    placeholder="Last name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
             <div>
               <label htmlFor="email-address" className="sr-only">
                 Email address
@@ -220,57 +273,74 @@ export default function SignIn() {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-t-md focus:outline-none focus:ring-fundezy-red focus:border-fundezy-red focus:z-10 sm:text-sm bg-white dark:bg-gray-700"
+                className={`appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white ${isSignUp && signUpStage === 'password' ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed' : 'bg-white dark:bg-gray-700'} ${!isSignUp || signUpStage === 'name-email' ? 'rounded-t-md' : 'rounded-md'} focus:outline-none focus:ring-fundezy-red focus:border-fundezy-red focus:z-10 sm:text-sm`}
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                readOnly={isSignUp && signUpStage === 'password'}
               />
             </div>
-            <div className="relative">
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-b-md focus:outline-none focus:ring-fundezy-red focus:border-fundezy-red focus:z-10 sm:text-sm bg-white dark:bg-gray-700"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            {(!isSignUp || signUpStage === 'password') && (
+              <div className="relative">
+                <label htmlFor="password" className="sr-only">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  required
+                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-b-md focus:outline-none focus:ring-fundezy-red focus:border-fundezy-red focus:z-10 sm:text-sm bg-white dark:bg-gray-700"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                  ) : (
+                    <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            )}
+          </div>
+
+          {isSignUp && signUpStage === 'password' && (
+            <div className="flex items-center justify-between">
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={handleBackToNameEmail}
+                className="text-sm text-fundezy-red hover:text-red-600"
               >
-                {showPassword ? (
-                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                  </svg>
-                ) : (
-                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                )}
+                Back
               </button>
             </div>
-          </div>
+          )}
 
-          <div className="flex items-center justify-between">
-            <button
-              type="button"
-              onClick={() => setIsResetPassword(true)}
-              className="text-sm text-fundezy-red hover:text-red-600"
-            >
-              Forgot your password?
-            </button>
-          </div>
+          {!isSignUp && (
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setIsResetPassword(true)}
+                className="text-sm text-fundezy-red hover:text-red-600"
+              >
+                Forgot your password?
+              </button>
+            </div>
+          )}
 
-          <div>
+          <div className="space-y-4">
             <button
               type="submit"
               disabled={isLoading}
@@ -282,9 +352,21 @@ export default function SignIn() {
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
               ) : (
-                isSignUp ? 'Sign up' : 'Sign in'
+                isSignUp 
+                  ? (signUpStage === 'name-email' ? 'Continue' : 'Sign up')
+                  : 'Sign in'
               )}
             </button>
+
+            {isSignUp && signUpStage === 'password' && (
+              <button
+                type="button"
+                onClick={handleBackToNameEmail}
+                className="w-full flex justify-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-fundezy-red"
+              >
+                Back
+              </button>
+            )}
           </div>
         </form>
 
@@ -341,7 +423,7 @@ export default function SignIn() {
         <div className="text-center">
           <button
             type="button"
-            onClick={() => setIsSignUp(!isSignUp)}
+            onClick={handleToggleSignUp}
             className="font-medium text-fundezy-red hover:text-red-600"
           >
             {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
