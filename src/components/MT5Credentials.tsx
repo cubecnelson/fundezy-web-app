@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { EyeIcon, EyeSlashIcon, ClipboardIcon, ClipboardDocumentCheckIcon } from '@heroicons/react/24/outline';
 import { createMTTDemoAccount } from '../services/matchTraderService';
 import { FeedbackForm } from './FeedbackForm';
-import { getApiUrl } from '../config/env.config';
+// import { getApiUrl } from '../config/env.config';
 
 interface MT5CredentialsProps {
   server: string;

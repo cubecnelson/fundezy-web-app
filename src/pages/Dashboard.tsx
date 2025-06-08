@@ -229,13 +229,13 @@ export const Dashboard = () => {
     }
   };
 
-  const handleOpenWebTerminal = () => {
-    if (user?.email && isUniversityEmail(user.email)) {
-      setShowUniversityPopup(true);
-      return;
-    }
-    // ... rest of the existing handleOpenWebTerminal code ...
-  };
+  // const handleOpenWebTerminal = () => {
+  //   if (user?.email && isUniversityEmail(user.email)) {
+  //     setShowUniversityPopup(true);
+  //     return;
+  //   }
+  //   // ... rest of the existing handleOpenWebTerminal code ...
+  // };
 
   if (loading) {
     return (
