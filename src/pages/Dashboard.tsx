@@ -26,6 +26,7 @@ import { mttAccountService } from '../services/mttAccountService';
 import { mttTradingAccountService } from '../services/mttTradingAccountService';
 import { isUniversityEmail } from '../utils/domainCheck';
 import { UniversityDomainPopup } from '../components/UniversityDomainPopup';
+import { getTradingAccountById } from '../services/matchTraderService';
 
 export const Dashboard = () => {
   const { user } = useAuth();
@@ -48,6 +49,7 @@ export const Dashboard = () => {
   const [rankings, setRankings] = useState<Ranking[]>([]);
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
   const [showUniversityPopup, setShowUniversityPopup] = useState(false);
+  const [tradingAcctStatusMap, setTradingAcctStatusMap] = useState<{ [key: string]: string }>({});
 
   useAnalytics('Dashboard');
 
@@ -85,6 +87,19 @@ export const Dashboard = () => {
   useEffect(() => {
       const challengeIdList = mt5Accounts.map((account) => account.challengeId).filter((id) => id !== undefined);
       fetchChallenges(challengeIdList);
+  }, [mt5Accounts]);
+
+  useEffect(() => {
+    if (mt5Accounts.length > 0) {
+      const matchTraderAccount = mt5Accounts.filter((account) => account.server === 'MTT').map((account) => getTradingAccountById(account.id));
+      var statusMap: { [key: string]: string } = {};
+      Promise.all(matchTraderAccount).then((accounts) => {
+      accounts.forEach((account) => {
+        statusMap[account.accountId] = account.status;
+      });
+      setTradingAcctStatusMap(statusMap);
+     });
+    }
   }, [mt5Accounts]);
 
   useEffect(() => {
@@ -343,7 +358,7 @@ export const Dashboard = () => {
             {...mt5Accounts.map((account) => (
               <button
                 key={account.id}
-                onClick={() => {
+                onClick={!(account.server === 'MTT' && (tradingAcctStatusMap[account.id] === 'ACTIVE' || tradingAcctStatusMap[account.id] === 'ACTIVE_PARTICIPATING_IN_CHALLENGE')) ? undefined : () => {
                   setSelectedAccount(account);
                   setShowCreateAccount(false);
                 }}
@@ -375,13 +390,22 @@ export const Dashboard = () => {
                     )}
                     </div>
                   </div>
-                  <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    account.status === 'active'
+                  {( account.server === 'MTT') && 
+                  (<div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    tradingAcctStatusMap[account.id] === 'ACTIVE' || tradingAcctStatusMap[account.id] === 'ACTIVE_PARTICIPATING_IN_CHALLENGE' 
                       ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                       : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
                   }`}>
+                    {tradingAcctStatusMap[account.id] === 'ACTIVE' || tradingAcctStatusMap[account.id] === 'ACTIVE_PARTICIPATING_IN_CHALLENGE' ? 'Active' : 'Inactive'}
+                  </div>)}
+                  {( account.server !== 'MTT') && 
+                  (<div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    account.status  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                      : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                  }`}>
                     {account.status}
-                  </div>
+                  </div>)}
+                  
                 </div>
               </button>
             ))}

@@ -307,4 +307,42 @@ export const getChallenges = async (): Promise<Challenge[]> => {
     console.error('Error fetching challenges:', error);
     throw error;
   }
+};
+
+export interface TradingAccountResponse {
+  accountId: string;
+  login: string | null;
+  name: string;
+  email: string;
+  created: string;
+  challengeName: string;
+  challengeId: string;
+  phaseName: string;
+  phaseStep: number | null;
+  status: 'ACTIVE_PARTICIPATING_IN_CHALLENGE' | 'ACTIVE' | string;
+  tradingDays: number | null;
+}
+
+export const getTradingAccountById = async (accountId: string): Promise<TradingAccountResponse> => {
+  try {
+    const response = await fetch(`${BASE_URL}/prop/accounts/${accountId}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': AUTH_TOKEN,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      throw new Error(
+        errorData?.message || `Failed to get trading account: ${response.statusText}`
+      );
+    }
+
+    return await response.json();
+  } catch (error: any) {
+    console.error('Error getting trading account:', error);
+    throw error;
+  }
 }; 
