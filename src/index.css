@@ -6,6 +6,15 @@
   body {
     @apply bg-white text-google-gray dark:bg-gray-900 dark:text-gray-300;
   }
+
+  /* Grid background pattern */
+  .bg-grid-white\/\[0\.02\] {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  }
+
+  .bg-grid-white\/\[0\.05\] {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  }
 }
 
 @layer components {
@@ -17,5 +26,41 @@
   }
   .nav-link {
     @apply text-sm text-google-gray hover:text-fundezy-red dark:text-gray-400 dark:hover:text-red-500;
+  }
+
+  /* Custom animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: -3s;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translateY(-20px);
+      opacity: 0.6;
+    }
+  }
+
+  /* Gradient text utilities */
+  .text-gradient-red {
+    background: linear-gradient(135deg, #e60000, #ff4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 }
